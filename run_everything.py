@@ -30,7 +30,7 @@ def install_environment():
 
 def launch_webots():
     print("Launching webots world...")
-    sp.run(R"phase_d\world\webots_world.wbt --stdout", shell=True)
+    sp.run(R"phase_d\world\webots_world.wbt", shell=True)
 
 def main():
 
