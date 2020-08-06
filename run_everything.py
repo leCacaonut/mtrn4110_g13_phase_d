@@ -28,6 +28,11 @@ def install_environment():
         req_process.wait()
         return True
 
+def convert_map():
+    sp.run(R"echo Printing map...", shell=True)
+    sp.run(R"run_phase_c.bat", shell=True)
+    sp.run(R"echo Map exported", shell=True)
+
 def launch_webots():
     print("Launching webots world...")
     sp.run(R"phase_d\world\webots_world.wbt", shell=True)
@@ -44,9 +49,7 @@ def main():
     
     else:
         sp.run(R"echo Running programs", shell=True)
-        sp.run(R"echo Printing map...", shell=True)
-        sp.run(R"run_phase_c.bat", shell=True)
-        sp.run(R"echo Map exported", shell=True)
+        convert_map()
         launch_webots()
 
 if __name__ == "__main__":

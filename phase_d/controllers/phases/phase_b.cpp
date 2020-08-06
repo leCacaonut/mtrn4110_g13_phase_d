@@ -122,83 +122,84 @@ vector<Pathing*> findPath(int cValues[MAP_ROW][MAP_COL], bool hWalls[MAP_ROW + 1
 //   runProcess();
 //   return 0;
 // }
-
-void runProcess(){
-  bool hWalls[MAP_ROW + 1][MAP_COL] = {0};
-  bool vWalls[MAP_ROW][MAP_COL + 1] = {0};
-  int cValues[MAP_ROW][MAP_COL] = {0};
-  // initialise a high value
-  for(int i = 0; i < MAP_ROW; ++i) {
-    for(int j = 0; j < MAP_COL; ++j) {
-      cValues[i][j] = MAP_ROW*MAP_COL+1;
+namespace PathFinding{
+  void generatePath(){
+    bool hWalls[MAP_ROW + 1][MAP_COL] = {0};
+    bool vWalls[MAP_ROW][MAP_COL + 1] = {0};
+    int cValues[MAP_ROW][MAP_COL] = {0};
+    // initialise a high value
+    for(int i = 0; i < MAP_ROW; ++i) {
+      for(int j = 0; j < MAP_COL; ++j) {
+        cValues[i][j] = MAP_ROW*MAP_COL+1;
+      }
     }
-  }
-  
-  int heading;
-  int startingPos[2] = {0, 0};
-  int goal[2] = GOAL;
-  
-  // read map file
-  ifstream mapfile(MAP_FILE_NAME);
-  if(!mapfile.is_open()) {
-    cout << "Error opening file\n";
-    exit(-1);
-  }
-  cout << "--- Task 1 ---" << endl;
-  processMap(mapfile, hWalls, vWalls, startingPos, heading);
-
-  mapfile.close();
-  floodFillMap(cValues, hWalls, vWalls, startingPos, goal);
-  cout << "--- Task 2 ---" << endl;
-  vector<Pathing*> path = findPath(cValues, hWalls, vWalls, startingPos, heading, goal);
-
-  
-  // process each path
-  for(unsigned int i = 0; i < path.size(); ++i) {
-    // translate raw NESW instructions to FLR instructions
-    // processPath(path[i], heading);
-    path[i]->processPath(heading);
     
-    cout << "--- Path " << i + 1 << " ---" << endl;
-    // print path on map
-    printMap(cValues, hWalls, vWalls, startingPos, heading, path[i]);
-  }
-  
-  // find the path with the least amount of turns (MAY NOT BE SHORTEST OVERALL INSTRUCTIONS)
-  // in this case, least 'expense'
-  char h = N;
-  switch(heading) {
-    case N: h = 'N'; break;
-    case E: h = 'E'; break;
-    case S: h = 'S'; break;
-    case W: h = 'W'; break;
-  }
-  int pathID = 0;
-  int exp = 99;
-  for(unsigned int i = 0; i < path.size(); ++i) {
-    if(path[i]->expense < exp) {
-      pathID = i;
-      exp = path[i]->expense;
+    int heading;
+    int startingPos[2] = {0, 0};
+    int goal[2] = GOAL;
+    
+    // read map file
+    ifstream mapfile(MAP_FILE_NAME);
+    if(!mapfile.is_open()) {
+      cout << "Error opening file\n";
+      exit(-1);
     }
+    cout << "--- Task 1 ---" << endl;
+    processMap(mapfile, hWalls, vWalls, startingPos, heading);
+
+    mapfile.close();
+    floodFillMap(cValues, hWalls, vWalls, startingPos, goal);
+    cout << "--- Task 2 ---" << endl;
+    vector<Pathing*> path = findPath(cValues, hWalls, vWalls, startingPos, heading, goal);
+
+    
+    // process each path
+    for(unsigned int i = 0; i < path.size(); ++i) {
+      // translate raw NESW instructions to FLR instructions
+      // processPath(path[i], heading);
+      path[i]->processPath(heading);
+      
+      cout << "--- Path " << i + 1 << " ---" << endl;
+      // print path on map
+      printMap(cValues, hWalls, vWalls, startingPos, heading, path[i]);
+    }
+    
+    // find the path with the least amount of turns (MAY NOT BE SHORTEST OVERALL INSTRUCTIONS)
+    // in this case, least 'expense'
+    char h = N;
+    switch(heading) {
+      case N: h = 'N'; break;
+      case E: h = 'E'; break;
+      case S: h = 'S'; break;
+      case W: h = 'W'; break;
+    }
+    int pathID = 0;
+    int exp = 99;
+    for(unsigned int i = 0; i < path.size(); ++i) {
+      if(path[i]->expense < exp) {
+        pathID = i;
+        exp = path[i]->expense;
+      }
+    }
+    
+    cout << "--- Task 3 ---" << endl;
+    printMap(cValues, hWalls, vWalls, startingPos, heading, path[pathID]);
+    cout << "Steps: " << path[pathID]->instructionalPath.length() << endl;
+    cout << "Path: " << startingPos[0] << startingPos[1] << h << path[pathID]->instructionalPath << endl;
+    
+    cout << "--- Task 4 ---" << endl;
+    cout << "File: " << PATH_PLAN_FILE_NAME << endl;
+    // export path to a text file
+    ofstream outputFile(PATH_PLAN_FILE_NAME);
+    outputFile << startingPos[0] << startingPos[1] << h << path[pathID]->instructionalPath << endl;
+    outputFile.close();
+    
+    ifstream _outputFile(PATH_PLAN_FILE_NAME);
+    string output;
+    getline(_outputFile, output);
+    cout << "Path: " << output << endl;
+    _outputFile.close();
   }
-  
-  cout << "--- Task 3 ---" << endl;
-  printMap(cValues, hWalls, vWalls, startingPos, heading, path[pathID]);
-  cout << "Steps: " << path[pathID]->instructionalPath.length() << endl;
-  cout << "Path: " << startingPos[0] << startingPos[1] << h << path[pathID]->instructionalPath << endl;
-  
-  cout << "--- Task 4 ---" << endl;
-  cout << "File: " << PATH_PLAN_FILE_NAME << endl;
-  // export path to a text file
-  ofstream outputFile(PATH_PLAN_FILE_NAME);
-  outputFile << startingPos[0] << startingPos[1] << h << path[pathID]->instructionalPath << endl;
-  outputFile.close();
-  
-  ifstream _outputFile(PATH_PLAN_FILE_NAME);
-  string output;
-  getline(_outputFile, output);
-  cout << "Path: " << output << endl;
-  _outputFile.close();
 }
 
 void processMap(std::ifstream& mapfile, bool hWalls[MAP_ROW + 1][MAP_COL], bool vWalls[MAP_ROW][MAP_COL + 1], int startingPos[2], int &heading) {

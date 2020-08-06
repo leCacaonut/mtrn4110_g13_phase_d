@@ -17,7 +17,7 @@ using namespace std;
 
 int main(int argc, char **argv) {
   cout << "Finding path" << endl;
-  runProcess();
+  PathFinding::generatePath();
   cout << "Moving..." << endl;
   Epuck r = Epuck(); 
   r.runSim();
