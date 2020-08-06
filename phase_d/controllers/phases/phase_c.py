@@ -4,14 +4,7 @@ import cv2 # OpenCV library
 import numpy as np # Numpy library for scientific computing
 import matplotlib.pyplot as plt # Matplotlib library for plotting
 
-
-def main():
-    MAZE_FILE_NAME = "../../Maze.png"
-    ROBOT_FILE_NAME = "../../Robot.png"
-    MAP_FILE_NAME = "../../MapFound.txt"
-    # MAZE_FILE_NAME = "phase_d/Maze.png"
-    # ROBOT_FILE_NAME = "phase_d/Robot.png"
-    # MAP_FILE_NAME = "phase_d/MapFound.txt"
+def convert_image_to_file(MAZE_FILE_NAME = "../../world_view/Maze.png", ROBOT_FILE_NAME = "../../world_view/Robot.png", MAP_FILE_NAME = "../../MapFound.txt"):
     # Read Maze.png and Display in RGB 
     def imgReadAndDisplay(path):
         img = cv2.imread(path)
@@ -365,6 +358,9 @@ def main():
 
     map = generateMap(wallMask,pos,heading)
     writeToFile(map)
+
+def main():
+    convert_image_to_file()
 
 if __name__ == '__main__':
     main()

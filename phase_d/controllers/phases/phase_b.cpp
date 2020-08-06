@@ -124,8 +124,6 @@ vector<Pathing*> findPath(int cValues[MAP_ROW][MAP_COL], bool hWalls[MAP_ROW + 1
 // }
 
 void runProcess(){
-  Robot *robot = new Robot();
-  
   bool hWalls[MAP_ROW + 1][MAP_COL] = {0};
   bool vWalls[MAP_ROW][MAP_COL + 1] = {0};
   int cValues[MAP_ROW][MAP_COL] = {0};
@@ -201,11 +199,6 @@ void runProcess(){
   getline(_outputFile, output);
   cout << "Path: " << output << endl;
   _outputFile.close();
-  
-  while (robot->step(TIME_STEP) != -1) {
-  };
-  
-  delete robot;
 }
 
 void processMap(std::ifstream& mapfile, bool hWalls[MAP_ROW + 1][MAP_COL], bool vWalls[MAP_ROW][MAP_COL + 1], int startingPos[2], int &heading) {
