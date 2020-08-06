@@ -12,6 +12,7 @@
 #include <webots/Motor.hpp>
 #include <webots/DistanceSensor.hpp>
 #include <webots/PositionSensor.hpp>
+#include <Python.h>
 
 // other includes
 #include <fstream>
