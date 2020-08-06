@@ -4,7 +4,7 @@ Run this python script to execute everything
 '''
 
 import subprocess as sp
-import codecs, re, time
+import codecs, re
 
 def check_environment():
     env_list = sp.check_output(["conda", "info", "--envs"])
@@ -30,7 +30,7 @@ def install_environment():
 
 def launch_webots():
     print("Launching webots world...")
-    sp.run(R"phase_d\world\webots_world.wbt", shell=True)
+    sp.run(R"phase_d\world\webots_world.wbt --stdout", shell=True)
 
 def main():
 

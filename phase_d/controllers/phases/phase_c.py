@@ -169,7 +169,7 @@ def main():
         
         return img, mask_3_channel
 
-    transfordMazeWithWalls, wallMask = findWalls(transformedMaze,lower,upper)
+    [transformedMazeWithWalls, wallMask] = findWalls(transformedMaze,lower,upper)
 
     # Detect the location and heading of the robot
     #read the robot.png file
@@ -280,7 +280,7 @@ def main():
         
         return robotPosition, direction
 
-    pos,heading= findHeading(transfordMazeWithWalls,lower,upper,direction)
+    pos,heading = findHeading(transformedMazeWithWalls,lower,upper,direction)
 
     # Generate a map and write it to a text file
     def generateMap(img,position,heading):
@@ -367,7 +367,4 @@ def main():
     writeToFile(map)
 
 if __name__ == '__main__':
-    MAZE_FILE_NAME = "../../Maze.png"
-    ROBOT_FILE_NAME = "../../Robot.png"
-    MAP_FILE_NAME = "../../MapFound.txt"
     main()
