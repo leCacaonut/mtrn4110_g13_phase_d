@@ -11,7 +11,7 @@ def check_environment():
     env_list = env_list.replace(b'\\', b'/')
     env_list = codecs.escape_decode(env_list)[0].decode("utf-8")
     
-    env_var = re.split(R"\n|\r|/ ", env_list)
+    env_var = re.split(R"\n|\r|/| ", env_list)
     
     if "mtrn4110_g13" in env_var:
         return True
