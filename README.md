@@ -3,11 +3,9 @@ the final phase of the assignment
 
 ## Setup
 ###
-*Make sure you have Anaconda installed
-
-*Webots should be linked to open with a .wbt file
-
-*Windows 10
+* Make sure you have Anaconda installed
+* Webots should be linked to open with a .wbt file
+* Windows 10
 
 ## How to use
 ###
