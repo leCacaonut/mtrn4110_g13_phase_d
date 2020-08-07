@@ -21,8 +21,9 @@ using namespace std;
 #define NUM_SENSORS 3
 #define WALL_DETECTED 1000
 #define YAW_INDEX 2
+#define DEVIATION 0.01
 
-// initialising constants
+// initialising constants (index of instructions in file)
 #define INIT_ROW 0
 #define INIT_COL 1
 #define INIT_HEAD 2
@@ -92,7 +93,7 @@ class Epuck {
     void updateHeading();
     void updateSurroundings();
     // navigation
-    void moveRobot();
+    void moveRobot(unsigned int numberOfMotions);
     void rotateRobot();
     void displayStatus();
 };

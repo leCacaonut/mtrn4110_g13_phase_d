@@ -156,9 +156,9 @@ void Epuck::updateHeading() {
     }
 }
 
-void Epuck::moveRobot() {
-    double lTarget = motorPosition[LMOTOR] + DIST_FORWARD;
-    double rTarget = motorPosition[RMOTOR] + DIST_FORWARD;
+void Epuck::moveRobot(unsigned int numberOfMotions) {
+    double lTarget = motorPosition[LMOTOR] + DIST_FORWARD * numberOfMotions;
+    double rTarget = motorPosition[RMOTOR] + DIST_FORWARD * numberOfMotions;
 
     // set motor speed
     motors[LMOTOR]->setVelocity(SPEED_FORWARD);
@@ -166,21 +166,20 @@ void Epuck::moveRobot() {
     // set new position
     motors[LMOTOR]->setPosition(lTarget);
     motors[RMOTOR]->setPosition(rTarget);
-
-    getPosSensorReadings();
+    
     // wait for robot to reach position
     while (robot->step(TIME_STEP) != -1) {
+        getPosSensorReadings();
         double lPos = posSensorReadings[LMOTOR];
         double rPos = posSensorReadings[RMOTOR];
         // check if position has been reached
-        if (lPos >= lTarget && rPos >= rTarget) {
+        if (lPos >= lTarget - DEVIATION && rPos >= rTarget - DEVIATION) {
             motorPosition[LMOTOR] = posSensorReadings[LMOTOR];
             motorPosition[RMOTOR] = posSensorReadings[RMOTOR];
             break;
         }
-
-        getPosSensorReadings();
     }
+    getPosSensorReadings();
 
     // update grid position and walls
     updatePosition();
@@ -207,8 +206,8 @@ void Epuck::rotateRobot() {
     while (robot->step(TIME_STEP) != -1) {
         double rPos = posSensorReadings[RMOTOR];
         // check if position has been reached, set break condiion
-        currCommand == 'R' ? (breakCondition = (rPos <= rTarget))
-                           : (breakCondition = (rPos >= rTarget));
+        currCommand == 'R' ? (breakCondition = (rPos <= rTarget + DEVIATION))
+                           : (breakCondition = (rPos >= rTarget - DEVIATION));
 
         if (breakCondition) {
             motorPosition[LMOTOR] = posSensorReadings[LMOTOR];
@@ -260,11 +259,21 @@ void Epuck::runSim() {
     displayStatus();
 
     while (robot->step(TIME_STEP) != -1) {
+        unsigned int numberOfMotions = 0;
         currCommand = commands[currCommandIndex];
-        currCommand == 'F' ? moveRobot() : rotateRobot();
-        currCommandIndex += 1;
+        if (currCommand == 'F') {
+            while (commands[currCommandIndex] == 'F') {
+                ++numberOfMotions;
+                ++currCommandIndex;
+            }
+            moveRobot(numberOfMotions);
+        } else {
+            currCommand = commands[currCommandIndex];
+            ++currCommandIndex;
+            rotateRobot();
+        }
 
-        displayStatus();
+        // displayStatus();
 
         // if final command executed
         if (currCommandIndex == endCommand) {
