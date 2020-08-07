@@ -9,11 +9,9 @@ the final phase of the assignment
 
 ## How to use
 ###
-Run 'run_everything.py' with whatever python you have installed
-
-Initial run will install necessary files
-
-Subsequent runs will launch all files
+1. Run 'run_everything.py' with whatever python you have installed
+1. Initial run will install necessary files
+1. Subsequent runs will launch all files
 
 ## How to run features
 ###
