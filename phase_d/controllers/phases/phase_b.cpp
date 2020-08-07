@@ -5,9 +5,6 @@
 // Modifications: 
 // Hard-coding: Nope
 
-// Question
-// maintain a list of short paths?
-
 #include <webots/Robot.hpp>
 #include <string>
 #include <vector>
@@ -19,12 +16,22 @@
 using namespace std;
 using namespace webots;
 
-#define TIME_STEP 64
 #define MAP_FILE_NAME "../../MapFound.txt"
 // #define PATH_PLAN_FILE_NAME "../../PathPlanFound.txt"
 #define MAP_ROW 5
 #define MAP_COL 9
-#define GOAL {2, 4}
+#if MAP_ROW % 2 == 0
+  #define RGOAL MAP_ROW / 2
+#else
+  #define RGOAL (MAP_ROW - 1) / 2
+#endif
+#if MAP_COL % 2 == 0
+  #define CGOAL MAP_COL / 2
+#else
+  #define CGOAL (MAP_COL - 1) / 2
+#endif
+#define GOAL {RGOAL, CGOAL}
+
 
 enum {N, E, S, W};
 
@@ -51,6 +58,7 @@ class Pathing {
         }
       }
     }
+    
     Pathing(string dirPath, vector<int> currPos, int cv) {
       directionalPath = dirPath;
       currentPosition[0] = currPos[0];

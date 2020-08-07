@@ -332,6 +332,43 @@ void Epuck::rotateRobot() {
     updateWalls();
 }
 
+void Epuck::rotateRobot(char direction) {
+    double lTarget = motorPosition[LMOTOR] + DIST_ROTATE;
+    double rTarget = motorPosition[RMOTOR] + DIST_ROTATE;
+    bool breakCondition = false;
+
+    // adjust for direction
+    direction == 'R' ? (rTarget -= 2 * DIST_ROTATE) : (lTarget -= 2 * DIST_ROTATE);
+
+    // set motor speed
+    motors[LMOTOR]->setVelocity(SPEED_ROTATE);
+    motors[RMOTOR]->setVelocity(SPEED_ROTATE);
+    // set new position
+    motors[LMOTOR]->setPosition(lTarget);
+    motors[RMOTOR]->setPosition(rTarget);
+
+    getPosSensorReadings();
+    // wait for robot to reach position
+    while (robot->step(TIME_STEP) != -1) {
+        double rPos = posSensorReadings[RMOTOR];
+        // check if position has been reached, set break condiion
+        direction == 'R' ? (breakCondition = (rPos <= rTarget + DEVIATION))
+                           : (breakCondition = (rPos >= rTarget - DEVIATION));
+
+        if (breakCondition) {
+            motorPosition[LMOTOR] = posSensorReadings[LMOTOR];
+            motorPosition[RMOTOR] = posSensorReadings[RMOTOR];
+            break;
+        }
+
+        getPosSensorReadings();
+    }
+
+    // update grid position and walls
+    updateHeading();
+    updateWalls();
+}
+
 void Epuck::setInitStatus() {
     readPath();              // extract commands from file
     enableSensors();         // enable sensors

@@ -53,7 +53,7 @@ using namespace std;
 enum WallIDs { LEFT,
                RIGHT,
                FRONT } wIDs;  // wall position indexing
-enum PositionIDs { ROW,
+typedef enum PositionIDs { ROW,
                    COLUMN } pIDs;  // used to index position array
 enum MotorIDs { LMOTOR,
                 RMOTOR } mIDs;  // index left and right motors
