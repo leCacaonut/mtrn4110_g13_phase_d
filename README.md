@@ -2,6 +2,7 @@
 the final phase of the assignment
 
 ## Setup
+* Any version of python 3
 * Make sure you have Anaconda installed
 * Webots should be linked to open with a .wbt file
 * Windows 10
