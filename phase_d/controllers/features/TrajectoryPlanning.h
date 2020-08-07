@@ -21,7 +21,7 @@ using namespace std;
 #define NUM_SENSORS 3
 #define WALL_DETECTED 1000
 #define YAW_INDEX 2
-#define DEVIATION 0.01
+#define DEVIATION 0.03
 
 // initialising constants (index of instructions in file)
 #define INIT_ROW 0
