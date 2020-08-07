@@ -15,8 +15,6 @@ the final phase of the assignment
 
 ## How to run features
 ###
-Run 'run_everything_features.py' with whatever python you have installed
-
-Initial run will install necessary files
-
-Subsequent runs will launch all files
+1. Run 'run_everything_features.py' with whatever python you have installed
+1. Initial run will install necessary files
+1. Subsequent runs will launch all files
