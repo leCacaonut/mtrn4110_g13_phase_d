@@ -72,9 +72,8 @@ class Epuck {
    public:
     Epuck();
 
-    ~Epuck() {
-        delete robot;
-    };
+    ~Epuck();
+    
 
     // run simulation
     void runSim();

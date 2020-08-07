@@ -525,7 +525,7 @@ DEF z1234567 E-puck {
   hidden rotation_2 -1 0 0 4.405552627694129
   translation -0.66 0 -0.33
   rotation 0.0004201749619184547 0.9999998224615687 -0.0004225279075033802 3.14159
-  controller "main"
+  controller "features"
   camera_width 320
   camera_height 240
   turretSlot [

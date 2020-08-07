@@ -8,7 +8,7 @@
 // <webots/DistanceSensor.hpp>, <webots/Motor.hpp>, etc.
 // and/or to add some other includes
 #include <webots/Robot.hpp>
-#include "TrajectoryPlanning.h"
+#include "TrajectoryPlanning.cpp"
 #include "../phases/phase_b.cpp"
 
 // All the webots classes are defined in the "webots" namespace
@@ -21,6 +21,6 @@ int main(int argc, char **argv) {
   cout << "Moving..." << endl;
   Epuck r = Epuck(); 
   r.runSim();
-
+  
   return 0;
 }

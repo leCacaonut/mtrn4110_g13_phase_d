@@ -20,6 +20,10 @@ Epuck::Epuck() {
     posSensors[RMOTOR] = robot->getPositionSensor("right wheel sensor");
 }
 
+Epuck::~Epuck() {
+    delete robot;
+};
+
 // reads robot commands from PathPlan.txt
 void Epuck::readPath() {
     ifstream PathFile(PATH_PLAN_FILE_NAME);
