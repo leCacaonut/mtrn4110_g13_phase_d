@@ -22,7 +22,8 @@ int main(int argc, char **argv) {
   Epuck r = Epuck(); 
   r.runSim(true);
   
-  unique_ptr<Map> map(new Map());
+  unique_ptr<ExploreMap> emap(new ExploreMap());
   
+emap->print2DVector(emap->getExplored());
   return 0;
 }

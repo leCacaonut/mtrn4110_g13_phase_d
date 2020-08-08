@@ -25,26 +25,28 @@ using namespace std;
     #define COL 1
 #endif
 
-class Map {
-    private:
-        int mapSize[2];
-        int goal[2];
-        vector<vector<bool>> explored;
-        vector<vector<bool>> hWalls;
-        vector<vector<bool>> vWalls;
+class ExploreMap {
+private:
+    int mapSize[2];
+    int goal[2];
+    vector<vector<bool>> explored;
+    vector<vector<bool>> hWalls;
+    vector<vector<bool>> vWalls;
 
-    public:
-        Map();
-        ~Map();
-        void setMapSize(int row, int col);
-        void setDefaultGoal();
-        void setGoal(int row, int col);
-        
-        int* getMapSize();
-        int* getGoal();
+public:
+    ExploreMap();
+    ~ExploreMap();
 
-        void addHWall(int row, int col);
-        void addVWall(int row, int col);
-        void removeHWall(int row, int col);
-        void removeVWall(int row, int col);
+    void setDefaultGoal();
+    void setGoal(int row, int col);
+    
+    int* getMapSize();
+    int* getGoal();
+    vector<vector<bool>> getExplored();
+    vector<vector<bool>> getHWalls();
+    vector<vector<bool>> getVWalls();
+
+    bool addWall(int position[2], char heading, bool lWall, bool fWall, bool rWall);
+    bool removeWall(int position[2], char heading, bool lWall, bool fWall, bool rWall);
+    void print2DVector(vector<vector<bool>> p);
 };

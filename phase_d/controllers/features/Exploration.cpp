@@ -5,54 +5,78 @@
 */
 #include "Exploration.h"
 
-
-Map::Map() {
-    setMapSize(1, 1);
+ExploreMap::ExploreMap() {
+    explored.resize(5, vector<bool>(9, false));
     setDefaultGoal();
 }
 
-Map::~Map(){}
+ExploreMap::~ExploreMap() {}
 
-void Map::setMapSize(int row, int col) {
-    mapSize[ROW] = row;
-    mapSize[COL] = col;
+void ExploreMap::setDefaultGoal() {
+    int *s = {getMapSize()};
+    if (s[ROW] % 2 == 1) --s[ROW];
+    if (s[COL] % 2 == 1) --s[COL];
+    goal[ROW] = s[ROW] / 2;
+    goal[COL] = s[COL] / 2;
 }
 
-void Map::setDefaultGoal() {
-    int x = mapSize[ROW];
-    int y = mapSize[COL];
-    if (x % 2 == 1) --x;
-    if (y % 2 == 1) --y;
-    goal[ROW] = x / 2;
-    goal[COL] = y / 2;
-}
-
-void Map::setGoal(int row, int col) {
+void ExploreMap::setGoal(int row, int col) {
     goal[ROW] = row;
     goal[COL] = col;
 }
 
-int* Map::getMapSize() {
+int* ExploreMap::getMapSize() {
+    mapSize[ROW] = explored.size();
+    mapSize[COL] = explored[0].size();
     return mapSize;
 }
 
-int* Map::getGoal() {
+int* ExploreMap::getGoal() {
     return goal;
 }
 
-void Map::addHWall(int row, int col){
-    // set a wall to be true
-    // if outside of the size of the map, pushback
+vector<vector<bool>> ExploreMap::getExplored() {
+    return explored;
 }
 
-void Map::addVWall(int row, int col){
-
+vector<vector<bool>> ExploreMap::getHWalls() {
+    return hWalls;
 }
 
-void Map::removeHWall(int row, int col){
-
+vector<vector<bool>> ExploreMap::getVWalls() {
+    return vWalls;
 }
 
-void Map::removeVWall(int row, int col){
+// set a wall to be true
+// if outside of the size of the map, pushback
+bool ExploreMap::addWall(int position[2], char heading, bool lWall, bool fWall, bool rWall) {
+    switch (heading) {
+        case 'N':
+            // if (lWall) hWalls = true;
+            break;
+        case 'S':
+            break;
+        case 'W':
+            break;
+        case 'E':
+            break;
+        default:
+            return false;
+    }
+    return true;
+}
 
+bool ExploreMap::removeWall(int position[2], char heading, bool lWall, bool fWall, bool rWall) {
+    return true;
+}
+
+void ExploreMap::print2DVector(vector<vector<bool>> p) {
+    cout << "Vector H:\n";
+    for (unsigned int i = 0; i < p.size(); i++) {
+        for (unsigned int j = 0; j < p[i].size(); j++) {
+            cout << p[i][j];
+        }
+        cout << "\n";
+    }
+    cout << "\n";
 }

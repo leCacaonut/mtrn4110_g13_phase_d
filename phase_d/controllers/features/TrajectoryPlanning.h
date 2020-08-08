@@ -59,7 +59,7 @@ enum MotorIDs { LMOTOR,
                 RMOTOR } mIDs;  // index left and right motors
 
 class Epuck {
-   private:
+private:
     Robot *robot;
     Motor *motors[2];
     DistanceSensor *distSensors[3];
@@ -76,11 +76,11 @@ class Epuck {
     double motorPosition[2];
     char walls[3];
 
-   public:
+public:
     Epuck();
 
     ~Epuck();
-    
+
 
     // run simulation
     void runSim(bool smooth);
