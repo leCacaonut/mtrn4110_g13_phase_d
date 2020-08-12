@@ -156,6 +156,36 @@ void Epuck::updateHeading() {
     }
 }
 
+void Epuck::moveRobot() {
+    double lTarget = motorPosition[LMOTOR] + DIST_FORWARD;
+    double rTarget = motorPosition[RMOTOR] + DIST_FORWARD;
+
+    // set motor speed
+    motors[LMOTOR]->setVelocity(SPEED_FORWARD);
+    motors[RMOTOR]->setVelocity(SPEED_FORWARD);
+    // set new position
+    motors[LMOTOR]->setPosition(lTarget);
+    motors[RMOTOR]->setPosition(rTarget);
+
+    // wait for robot to reach position
+    while (robot->step(TIME_STEP) != -1) {
+        getPosSensorReadings();
+        double lPos = posSensorReadings[LMOTOR];
+        double rPos = posSensorReadings[RMOTOR];
+        // check if position has been reached
+        if (lPos >= lTarget - DEVIATION && rPos >= rTarget - DEVIATION) {
+            motorPosition[LMOTOR] = posSensorReadings[LMOTOR];
+            motorPosition[RMOTOR] = posSensorReadings[RMOTOR];
+            break;
+        }
+    }
+    getPosSensorReadings();
+
+    // update grid position and walls
+    updatePosition();
+    updateWalls();
+}
+
 void Epuck::moveRobot(unsigned int numberOfMotions) {
     double lTarget = motorPosition[LMOTOR] + DIST_FORWARD * numberOfMotions;
     double rTarget = motorPosition[RMOTOR] + DIST_FORWARD * numberOfMotions;
@@ -186,13 +216,97 @@ void Epuck::moveRobot(unsigned int numberOfMotions) {
     updateWalls();
 }
 
+void Epuck::moveRobot(unsigned int numberOfMotions, bool moveHalfGrid){
+    double lTarget = motorPosition[LMOTOR] + DIST_FORWARD * (numberOfMotions - 1) + DIST_FORWARD / 2;
+    double rTarget = motorPosition[RMOTOR] + DIST_FORWARD * (numberOfMotions - 1) + DIST_FORWARD / 2;
+
+    // set motor speed
+    motors[LMOTOR]->setVelocity(SPEED_FORWARD);
+    motors[RMOTOR]->setVelocity(SPEED_FORWARD);
+    // set new position
+    motors[LMOTOR]->setPosition(lTarget);
+    motors[RMOTOR]->setPosition(rTarget);
+
+    // wait for robot to reach position
+    while (robot->step(TIME_STEP) != -1) {
+        getPosSensorReadings();
+        double lPos = posSensorReadings[LMOTOR];
+        double rPos = posSensorReadings[RMOTOR];
+        // check if position has been reached
+        if (lPos >= lTarget - DEVIATION && rPos >= rTarget - DEVIATION) {
+            motorPosition[LMOTOR] = posSensorReadings[LMOTOR];
+            motorPosition[RMOTOR] = posSensorReadings[RMOTOR];
+            break;
+        }
+    }
+    getPosSensorReadings();
+
+    // update grid position and walls
+    updatePosition();
+    updateWalls();
+}
+
+void Epuck::rotateRobot(bool smoothGridTurn){
+    if (!smoothGridTurn) {
+        rotateRobot();
+    } else {
+        double lTarget, rTarget;
+        // adjust for direction
+        if (currCommand == 'R') {
+            lTarget = motorPosition[LMOTOR] + LARGE_ROTATE;
+            rTarget = motorPosition[RMOTOR] + SMALL_ROTATE;
+            // set motor speed
+            motors[LMOTOR]->setVelocity(SPEED_ROTATE);
+            motors[RMOTOR]->setVelocity(SPEED_ROTATE /2);
+        } else {
+            lTarget = motorPosition[LMOTOR] + SMALL_ROTATE;
+            rTarget = motorPosition[RMOTOR] + LARGE_ROTATE;
+            // set motor speed
+            motors[LMOTOR]->setVelocity(SPEED_ROTATE /2);
+            motors[RMOTOR]->setVelocity(SPEED_ROTATE);
+        }
+        bool breakCondition = false;
+
+
+        // set new position
+        motors[LMOTOR]->setPosition(lTarget);
+        motors[RMOTOR]->setPosition(rTarget);
+
+        getPosSensorReadings();
+        // wait for robot to reach position
+        while (robot->step(TIME_STEP) != -1) {
+            double rPos = posSensorReadings[RMOTOR];
+            // check if position has been reached, set break condiion
+            currCommand == 'R' ? (breakCondition = (rPos <= rTarget + DEVIATION))
+                            : (breakCondition = (rPos >= rTarget - DEVIATION));
+
+            if (breakCondition) {
+                motorPosition[LMOTOR] = posSensorReadings[LMOTOR];
+                motorPosition[RMOTOR] = posSensorReadings[RMOTOR];
+                break;
+            }
+
+            getPosSensorReadings();
+        }
+
+        // update grid position and walls
+        updateHeading();
+        updateWalls();
+    }
+}
+
 void Epuck::rotateRobot() {
-    double lTarget = motorPosition[LMOTOR] + DIST_ROTATE;
-    double rTarget = motorPosition[RMOTOR] + DIST_ROTATE;
+    double lTarget, rTarget;
+    if (currCommand == 'R') {
+        lTarget = motorPosition[LMOTOR] + DIST_ROTATE;
+        rTarget = motorPosition[RMOTOR] - DIST_ROTATE;
+    } else {
+        lTarget = motorPosition[LMOTOR] - DIST_ROTATE;
+        rTarget = motorPosition[RMOTOR] + DIST_ROTATE;
+    }
     bool breakCondition = false;
 
     // adjust for direction
-    currCommand == 'R' ? (rTarget -= 2 * DIST_ROTATE) : (lTarget -= 2 * DIST_ROTATE);
 
     // set motor speed
     motors[LMOTOR]->setVelocity(SPEED_ROTATE);
@@ -261,18 +375,18 @@ void Epuck::runSim() {
     while (robot->step(TIME_STEP) != -1) {
         unsigned int numberOfMotions = 0;
         currCommand = commands[currCommandIndex];
-        if (currCommand == 'F') {
-            while (commands[currCommandIndex] == 'F') {
-                ++numberOfMotions;
-                ++currCommandIndex;
-            }
-            moveRobot(numberOfMotions);
-        } else {
-            currCommand = commands[currCommandIndex];
-            ++currCommandIndex;
-            rotateRobot();
-        }
-
+        // if (currCommand == 'F') {
+        //     while (commands[currCommandIndex] == 'F') {
+        //         ++numberOfMotions;
+        //         ++currCommandIndex;
+        //     }
+        //     moveRobot(numberOfMotions);
+        // } else {
+        //     currCommand = commands[currCommandIndex];
+        //     ++currCommandIndex;
+        //     rotateRobot();
+        // }
+        rotateRobot(true);
         // displayStatus();
 
         // if final command executed

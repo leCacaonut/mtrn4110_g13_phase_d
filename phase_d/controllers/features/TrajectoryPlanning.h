@@ -31,15 +31,19 @@ using namespace std;
 
 // Vehicle and world geometry constants
 #define PI 3.1419
-#define WHEEL_RAD 20
-#define AXLE_LEN 56.6
-#define LEN_SQUARE 165.0
+#define WHEEL_RAD 0.020
+#define AXLE_LEN 0.0566
+#define LEN_SQUARE 0.165
 
 // Rotating and forward motion formulas
 #define DIST_FORWARD (LEN_SQUARE / WHEEL_RAD)
 #define DIST_ROTATE (PI / 4 * AXLE_LEN / WHEEL_RAD)
 #define SPEED_FORWARD MAX_SPEED
 #define SPEED_ROTATE 0.4 * MAX_SPEED
+#define GRID_GAP (LEN_SQUARE - AXLE_LEN)
+#define LR_WHEEL_ROTATE_RATIO
+#define SMALL_ROTATE 4.2568
+#define LARGE_ROTATE SMALL_ROTATE*2
 
 // Defined path to command file provided
 #define PATH_PLAN_FILE_NAME "../../PathPlan.txt"
@@ -93,7 +97,10 @@ class Epuck {
     void updateHeading();
     void updateSurroundings();
     // navigation
-    void moveRobot(unsigned int numberOfMotions);
+    void moveRobot(); // moves grid length
+    void moveRobot(unsigned int numberOfMotions); // smooth move grid length
+    void moveRobot(unsigned int numberOfMotions, bool moveHalfGrid); // smooth move half grid length
     void rotateRobot();
+    void rotateRobot(bool smoothGridTurn);
     void displayStatus();
 };
