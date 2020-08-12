@@ -217,9 +217,12 @@ void Epuck::moveRobot(unsigned int numberOfMotions) {
 }
 
 void Epuck::moveRobot(unsigned int numberOfMotions, bool moveHalfGrid){
-    double lTarget = motorPosition[LMOTOR] + DIST_FORWARD * (numberOfMotions - 1) + DIST_FORWARD / 2;
-    double rTarget = motorPosition[RMOTOR] + DIST_FORWARD * (numberOfMotions - 1) + DIST_FORWARD / 2;
-
+    double lTarget = motorPosition[LMOTOR] + DIST_FORWARD * (numberOfMotions);
+    double rTarget = motorPosition[RMOTOR] + DIST_FORWARD * (numberOfMotions);
+    if (moveHalfGrid) {
+        lTarget += DIST_FORWARD / 2;
+        rTarget += DIST_FORWARD / 2;
+    }
     // set motor speed
     motors[LMOTOR]->setVelocity(SPEED_FORWARD);
     motors[RMOTOR]->setVelocity(SPEED_FORWARD);
@@ -257,38 +260,32 @@ void Epuck::rotateRobot(bool smoothGridTurn){
             rTarget = motorPosition[RMOTOR] + SMALL_ROTATE;
             // set motor speed
             motors[LMOTOR]->setVelocity(SPEED_ROTATE);
-            motors[RMOTOR]->setVelocity(SPEED_ROTATE /2);
+            motors[RMOTOR]->setVelocity(SPEED_ROTATE * LR_WHEEL_ROTATE_RATIO);
         } else {
             lTarget = motorPosition[LMOTOR] + SMALL_ROTATE;
             rTarget = motorPosition[RMOTOR] + LARGE_ROTATE;
             // set motor speed
-            motors[LMOTOR]->setVelocity(SPEED_ROTATE /2);
+            motors[LMOTOR]->setVelocity(SPEED_ROTATE * LR_WHEEL_ROTATE_RATIO);
             motors[RMOTOR]->setVelocity(SPEED_ROTATE);
         }
-        bool breakCondition = false;
-
-
+        
         // set new position
         motors[LMOTOR]->setPosition(lTarget);
         motors[RMOTOR]->setPosition(rTarget);
 
-        getPosSensorReadings();
         // wait for robot to reach position
         while (robot->step(TIME_STEP) != -1) {
+            getPosSensorReadings();
+            double lPos = posSensorReadings[RMOTOR];
             double rPos = posSensorReadings[RMOTOR];
             // check if position has been reached, set break condiion
-            currCommand == 'R' ? (breakCondition = (rPos <= rTarget + DEVIATION))
-                            : (breakCondition = (rPos >= rTarget - DEVIATION));
-
-            if (breakCondition) {
+            if (lPos > rTarget - DEVIATION && rPos > rTarget - DEVIATION) {
                 motorPosition[LMOTOR] = posSensorReadings[LMOTOR];
                 motorPosition[RMOTOR] = posSensorReadings[RMOTOR];
                 break;
             }
-
-            getPosSensorReadings();
         }
-
+        getPosSensorReadings();
         // update grid position and walls
         updateHeading();
         updateWalls();
@@ -315,9 +312,9 @@ void Epuck::rotateRobot() {
     motors[LMOTOR]->setPosition(lTarget);
     motors[RMOTOR]->setPosition(rTarget);
 
-    getPosSensorReadings();
     // wait for robot to reach position
     while (robot->step(TIME_STEP) != -1) {
+        getPosSensorReadings();
         double rPos = posSensorReadings[RMOTOR];
         // check if position has been reached, set break condiion
         currCommand == 'R' ? (breakCondition = (rPos <= rTarget + DEVIATION))
@@ -328,10 +325,8 @@ void Epuck::rotateRobot() {
             motorPosition[RMOTOR] = posSensorReadings[RMOTOR];
             break;
         }
-
-        getPosSensorReadings();
     }
-
+    getPosSensorReadings();
     // update grid position and walls
     updateHeading();
     updateWalls();
@@ -364,34 +359,63 @@ void Epuck::displayStatus() {
          << endl;
 }
 
+void Epuck::smoothPath() {
+    for (unsigned int i = 0; i < commands.length(); ++i) {
+        if (commands[i] == 'L' || commands[i] == 'R') {
+            commands = commands.erase(i - 1, 1);
+        }
+    }
+    endCommand = commands.length();
+}
+
+
 /* 
  * Runs simulation by incrementing through provided commands
  * and navigating robot
 */
-void Epuck::runSim() {
+void Epuck::runSim(bool smooth) {
     setInitStatus();
     displayStatus();
 
-    while (robot->step(TIME_STEP) != -1) {
-        unsigned int numberOfMotions = 0;
+    // initially, turn to the correct heading, then go half grid to get started
+    // generate a smooth path
+    if (smooth) {
+        smoothPath();
+        cout << commands << endl;
         currCommand = commands[currCommandIndex];
-        // if (currCommand == 'F') {
-        //     while (commands[currCommandIndex] == 'F') {
-        //         ++numberOfMotions;
-        //         ++currCommandIndex;
-        //     }
-        //     moveRobot(numberOfMotions);
-        // } else {
-        //     currCommand = commands[currCommandIndex];
-        //     ++currCommandIndex;
-        //     rotateRobot();
-        // }
-        rotateRobot(true);
-        // displayStatus();
+        rotateRobot();
+        moveRobot(0, true);
+        while (true) {
+            unsigned int numberOfMotions = 0;
+            currCommand = commands[currCommandIndex];
+            // the following code is voodoo magic, do not attempt to understand
+            cout << currCommandIndex << ": " << commands[currCommandIndex] << endl;
+            if (currCommand == 'F') {
+                while (commands[currCommandIndex] == 'F') {
+                    ++numberOfMotions;
+                    ++currCommandIndex;
+                }
+                (currCommandIndex == endCommand) ? moveRobot(numberOfMotions - 1, true) : moveRobot(numberOfMotions, false);
+            } else {
+                currCommand = commands[currCommandIndex];
+                ++currCommandIndex;
+                rotateRobot(smooth);
+            }
 
-        // if final command executed
-        if (currCommandIndex == endCommand) {
-            break;
+
+            // if final command executed
+            if (currCommandIndex == endCommand) break;
+        }
+    } else {
+        while(robot->step(TIME_STEP) != -1) {
+            currCommand = commands[currCommandIndex];
+            currCommand == 'F' ? moveRobot() : rotateRobot();
+            currCommandIndex += 1;   
+
+            displayStatus();
+            
+            // if final command executed
+            if (currCommandIndex == endCommand) break;
         }
     }
 
