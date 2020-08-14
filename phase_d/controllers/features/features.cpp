@@ -16,14 +16,17 @@ using namespace webots;
 using namespace std;
 
 int main(int argc, char **argv) {
-  cout << "Finding path" << endl;
-  PathFinding::generatePath();
-  cout << "Moving..." << endl;
-  Epuck r = Epuck(); 
-  r.runSim(true);
+    Epuck epuck = Epuck();
+    unique_ptr<ExploreMap> emap(new ExploreMap());
   
-  unique_ptr<ExploreMap> emap(new ExploreMap());
-  
-emap->print2DVector(emap->getExplored());
-  return 0;
+    cout << "Exploring map" << endl;
+    emap->explore(epuck);
+    cout << "Map Explored" << endl;
+    // emap->print2DVector(emap->getExplored());
+    cout << "Finding path" << endl;
+    // PathFinding::generatePath();
+    cout << "Moving" << endl;
+    // epuck.runSim(true);
+    cout << "Complete" << endl;
+    return 0;
 }

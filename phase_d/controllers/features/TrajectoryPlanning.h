@@ -87,7 +87,7 @@ public:
     // initialisation
     void readPath();
     void enableSensors();
-    void setInitStatus();
+    void getCommands();
     // readings
     void getDistSensorReadings();
     void getPosSensorReadings();
@@ -104,6 +104,7 @@ public:
     void moveRobot(unsigned int numberOfMotions, bool moveHalfGrid); // smooth move half grid length
     void rotateRobot();
     void rotateRobot(bool smoothGridTurn);
+    void rotateRobot(char command);
     void smoothPath();
     void displayStatus();
 };

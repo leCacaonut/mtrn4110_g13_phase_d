@@ -10,6 +10,11 @@ ExploreMap::ExploreMap() {
     setDefaultGoal();
 }
 
+ExploreMap::ExploreMap(int row, int col) {
+    explored.resize(row, vector<bool>(col, false));
+    setDefaultGoal();
+}
+
 ExploreMap::~ExploreMap() {}
 
 void ExploreMap::setDefaultGoal() {
@@ -25,6 +30,10 @@ void ExploreMap::setGoal(int row, int col) {
     goal[COL] = col;
 }
 
+void ExploreMap::setExplored(int row, int col) {
+    explored[row][col] = true;
+}
+
 int* ExploreMap::getMapSize() {
     mapSize[ROW] = explored.size();
     mapSize[COL] = explored[0].size();
@@ -37,6 +46,10 @@ int* ExploreMap::getGoal() {
 
 vector<vector<bool>> ExploreMap::getExplored() {
     return explored;
+}
+
+bool ExploreMap::getExplored(int row, int col) {
+    return explored[row][col];
 }
 
 vector<vector<bool>> ExploreMap::getHWalls() {
@@ -79,4 +92,10 @@ void ExploreMap::print2DVector(vector<vector<bool>> p) {
         cout << "\n";
     }
     cout << "\n";
+}
+
+void ExploreMap::explore(Epuck& epuck) {
+    int currentLocation[2] = {0, 0};
+    epuck.rotateRobot('R');
+    cout << "ALALALA" << endl;
 }
