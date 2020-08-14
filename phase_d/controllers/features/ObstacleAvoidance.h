@@ -3,6 +3,7 @@
 #include <webots/Motor.hpp>
 #include <webots/PositionSensor.hpp>
 #include <webots/Robot.hpp>
+#include <webots/GPS.hpp>
 
 // other includes
 #include <cmath>
@@ -41,12 +42,21 @@ using namespace std;
 #define SPEED_FORWARD MAX_SPEED
 #define SPEED_ROTATE 0.4 * MAX_SPEED
 
+// Obstacle Avoidance
+#define GOFRONT 0
+#define TURNLEFT 1
+#define TURNRIGHT 2
+#define TOTAL_ROW 11
+
 // Defined path to command file provided
 #define PATH_PLAN_FILE_NAME "../../PathPlan.txt"
+#define MAP_FILE_NAME "../../MapFound.txt"
 
 enum WallIDs { LEFT,
                RIGHT,
-               FRONT } wIDs;  // wall position indexing
+               FRONT,
+               FRONTLEFT,
+               FRONTRIGHT } wIDs;  // wall position indexing
 enum PositionIDs { ROW,
                    COLUMN } pIDs;  // used to index position array
 enum MotorIDs { LMOTOR,
@@ -56,19 +66,23 @@ class Epuck {
    private:
     Robot *robot;
     Motor *motors[2];
-    DistanceSensor *distSensors[3];
+    DistanceSensor *distSensors[5];
     PositionSensor *posSensors[2];
+    GPS *GlobalPos;
 
     string commands;
+    string map[TOTAL_ROW];
     int currCommandIndex;
     char currCommand;
     int endCommand;
-    double distSensorReadings[3];
+    double distSensorReadings[5];
     double posSensorReadings[2];
     char heading;
     int gridPosition[2];
     double motorPosition[2];
     char walls[3];
+    double motorPositionDifference[2];
+    
 
    public:
     Epuck();
@@ -89,11 +103,14 @@ class Epuck {
     bool validPosReadings();
     // updates
     void updateWalls();
-    void updatePosition();
+    void updatePosition(double numberOfMotions);
     void updateHeading();
     void updateSurroundings();
     // navigation
-    void moveRobot(unsigned int numberOfMotions);
-    void rotateRobot();
+    void moveRobot(double numberOfMotions,bool avoidingObstacle);
+    void rotateRobot(char direction);
     void displayStatus();
+    //obstacle avoidance
+    void avoidObstacles(int obstacleLocation);
+    void moveHalfStep();
 };

@@ -1,8 +1,8 @@
-#VRML_SIM R2020b utf8
+#VRML_SIM R2020a utf8
 WorldInfo {
-  coordinateSystem "NUE"
 }
 Viewpoint {
+  fieldOfView 0.785403
   orientation -1 0 0 1.5708003061004252
   position 0 2.4984008606371138 -1.9832893001947556e-06
 }
@@ -16,6 +16,17 @@ RectangleArena {
 }
 DEF MAZE Group {
   children [
+    OilBarrel {
+      translation -0.56 0 -0.29
+      height 0.1
+      radius 0.03
+    }
+    OilBarrel {
+      translation -0.045 0 -0.25
+      name "oil barrel(1)"
+      height 0.1
+      radius 0.03
+    }
     DEF cornerStone Solid {
       translation -0.7424999999999818 0.032499426115087944 -0.4124999999999812
       rotation 0.1617625419498817 0.667334757776384 0.7269781297160514 -6.26758570974485e-16
@@ -519,16 +530,24 @@ DEF MAZE Group {
   ]
 }
 DEF z1234567 E-puck {
-  hidden position_0_0 141.86327999999577
-  hidden position_0_1 155.2020000000042
-  hidden rotation_1 -1 0 0 3.633203242044866
-  hidden rotation_2 -1 0 0 4.405552627694129
   translation -0.66 0 -0.33
   rotation 0.0004201749619184547 0.9999998224615687 -0.0004225279075033802 3.14159
-  controller "main"
+  controller "features"
   camera_width 320
   camera_height 240
   turretSlot [
+    InertialUnit {
+    }
+    GPS {
+    }
+    DistanceSensor {
+      rotation 0 1 0 1.27
+      name "Front Right Distance Sensor"
+    }
+    DistanceSensor {
+      rotation 0 1 0 1.87
+      name "Front Left Distance Sensor"
+    }
     DistanceSensor {
       name "Right Distance Sensor"
     }
