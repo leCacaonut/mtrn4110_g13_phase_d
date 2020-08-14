@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
   PathFinding::generatePath();
   cout << "Moving..." << endl;
   Epuck r = Epuck(); 
-  r.runSim();
+  r.runSim(false);
   
   return 0;
 }

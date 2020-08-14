@@ -21,7 +21,7 @@ using namespace std;
 #define NUM_SENSORS 3
 #define WALL_DETECTED 1000
 #define YAW_INDEX 2
-#define DEVIATION 0.03
+#define DEVIATION 0.01
 
 // initialising constants (index of instructions in file)
 #define INIT_ROW 0
@@ -31,15 +31,21 @@ using namespace std;
 
 // Vehicle and world geometry constants
 #define PI 3.1419
-#define WHEEL_RAD 20
-#define AXLE_LEN 56.6
-#define LEN_SQUARE 165.0
+#define WHEEL_RAD 0.020
+#define AXLE_LEN 0.0566
+#define LEN_SQUARE 0.165
 
 // Rotating and forward motion formulas
 #define DIST_FORWARD (LEN_SQUARE / WHEEL_RAD)
+#define CORR_FACTOR_1 0.15
 #define DIST_ROTATE (PI / 4 * AXLE_LEN / WHEEL_RAD)
 #define SPEED_FORWARD MAX_SPEED
-#define SPEED_ROTATE 0.4 * MAX_SPEED
+#define SPEED_ROTATE (0.4 * MAX_SPEED)
+#define GRID_GAP ((LEN_SQUARE - AXLE_LEN) / 2) // the gap between the wheel and the edge of the grid when robot placed in the centre of the grid
+#define LR_WHEEL_ROTATE_RATIO (GRID_GAP / (GRID_GAP + AXLE_LEN))
+#define CORR_FACTOR_2 0.05
+#define SMALL_ROTATE ((PI / 4 * 2 * GRID_GAP / WHEEL_RAD) + CORR_FACTOR_2 * LR_WHEEL_ROTATE_RATIO) // with rough correction factor
+#define LARGE_ROTATE ((PI / 4 * 2 * (GRID_GAP + AXLE_LEN) / WHEEL_RAD) + CORR_FACTOR_2) // with rough correction factor
 
 // Defined path to command file provided
 #define PATH_PLAN_FILE_NAME "../../PathPlan.txt"
@@ -77,7 +83,7 @@ class Epuck {
     
 
     // run simulation
-    void runSim();
+    void runSim(bool smooth);
     // initialisation
     void readPath();
     void enableSensors();
@@ -93,7 +99,11 @@ class Epuck {
     void updateHeading();
     void updateSurroundings();
     // navigation
-    void moveRobot(unsigned int numberOfMotions);
+    void moveRobot(); // moves grid length
+    void moveRobot(unsigned int numberOfMotions); // smooth move grid length
+    void moveRobot(unsigned int numberOfMotions, bool moveHalfGrid); // smooth move half grid length
     void rotateRobot();
+    void rotateRobot(bool smoothGridTurn);
+    void smoothPath();
     void displayStatus();
 };
