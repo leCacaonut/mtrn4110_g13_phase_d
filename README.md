@@ -18,3 +18,11 @@ the final phase of the assignment
 1. Run 'run_everything_features.py' with whatever python you have installed
 1. Initial run will install necessary files
 1. Subsequent runs will launch all files
+
+## The plan
+1. Exploration of the map, go back to start
+1. Add obstacles to the map
+1. Robot path plans to the goal
+1. Robot attempts to go to the goal with smooth motion
+    1. If obstacle, use motions from obstacle
+1. Reach goal
