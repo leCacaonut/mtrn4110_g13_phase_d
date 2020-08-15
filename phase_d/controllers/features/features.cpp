@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "TrajectoryPlanning.cpp"
+#define PATHFINDING_CPP
 #include "../phases/phase_b.cpp"
 #include "Exploration.cpp"
 
@@ -16,11 +17,11 @@ using namespace webots;
 using namespace std;
 
 int main(int argc, char **argv) {
-    Epuck epuck = Epuck();
+    Epuck robot = Epuck();
     unique_ptr<ExploreMap> emap(new ExploreMap());
   
     cout << "Exploring map" << endl;
-    emap->explore(epuck);
+    emap->explore(robot);
     cout << "Map Explored" << endl;
     // emap->print2DVector(emap->getExplored());
     cout << "Finding path" << endl;

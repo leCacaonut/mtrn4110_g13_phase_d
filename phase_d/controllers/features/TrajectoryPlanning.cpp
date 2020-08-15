@@ -122,6 +122,10 @@ void Epuck::updateWalls() {
     distSensorReadings[FRONT] < WALL_DETECTED ? walls[FRONT] = 'Y' : walls[FRONT] = 'N';
 }
 
+char* Epuck::getWalls() {
+    return walls;
+}
+
 // update current row and column position and heading
 void Epuck::updatePosition() {
     switch (heading) {
@@ -363,11 +367,12 @@ void Epuck::rotateRobot(char command) {
     motors[RMOTOR]->setPosition(rTarget);
 
     // wait for robot to reach position
-    while (robot->step(TIME_STEP) != -1) {
+    // while (robot->step(TIME_STEP) != -1) {
+    while(true) {
         getPosSensorReadings();
         double rPos = posSensorReadings[RMOTOR];
         // check if position has been reached, set break condiion
-        currCommand == 'R' ? (breakCondition = (rPos <= rTarget + DEVIATION))
+        command == 'R' ? (breakCondition = (rPos <= rTarget + DEVIATION))
                            : (breakCondition = (rPos >= rTarget - DEVIATION));
 
         if (breakCondition) {

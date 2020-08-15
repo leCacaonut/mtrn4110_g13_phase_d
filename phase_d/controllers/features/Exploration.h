@@ -50,9 +50,11 @@ public:
     vector<vector<bool>> getHWalls();
     vector<vector<bool>> getVWalls();
 
-    bool addWall(int position[2], char heading, bool lWall, bool fWall, bool rWall);
-    bool removeWall(int position[2], char heading, bool lWall, bool fWall, bool rWall);
+    void setWalls(int position[2], char heading, char* walls);
+    bool addWall(int row, int col);
+    bool removeWall(int row, int col);
     void print2DVector(vector<vector<bool>> p);
 
-    void explore(Epuck &epuck);
+    template <typename T>
+    void explore(T& robot);
 };

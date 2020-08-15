@@ -98,6 +98,8 @@ public:
     void updatePosition();
     void updateHeading();
     void updateSurroundings();
+    // return functions
+    char *getWalls();
     // navigation
     void moveRobot(); // moves grid length
     void moveRobot(unsigned int numberOfMotions); // smooth move grid length
