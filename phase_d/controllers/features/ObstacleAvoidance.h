@@ -4,6 +4,7 @@
 #include <webots/PositionSensor.hpp>
 #include <webots/Robot.hpp>
 #include <webots/GPS.hpp>
+#include <webots/Camera.hpp>
 
 // other includes
 #include <cmath>
@@ -40,7 +41,7 @@ using namespace std;
 #define DIST_FORWARD (LEN_SQUARE / WHEEL_RAD)
 #define DIST_ROTATE (PI / 4 * AXLE_LEN / WHEEL_RAD)
 #define SPEED_FORWARD MAX_SPEED
-#define SPEED_ROTATE 0.4 * MAX_SPEED
+#define SPEED_ROTATE 0.4*MAX_SPEED
 
 // Obstacle Avoidance
 #define GOFRONT 0
@@ -69,6 +70,7 @@ class Epuck {
     DistanceSensor *distSensors[5];
     PositionSensor *posSensors[2];
     GPS *GlobalPos;
+    Camera *camera;
 
     string commands;
     string map[TOTAL_ROW];

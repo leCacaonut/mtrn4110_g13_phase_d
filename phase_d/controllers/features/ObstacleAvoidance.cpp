@@ -20,6 +20,8 @@ Epuck::Epuck() {
     // position sensors
     posSensors[LMOTOR] = robot->getPositionSensor("left wheel sensor");
     posSensors[RMOTOR] = robot->getPositionSensor("right wheel sensor");
+    // camera
+    camera = robot->getCamera("camera");
 }
 
 Epuck::~Epuck() {
@@ -63,6 +65,8 @@ void Epuck::enableSensors() {
     // enable position sensors
     posSensors[LMOTOR]->enable(TIME_STEP);
     posSensors[RMOTOR]->enable(TIME_STEP);
+    // enable camera
+    camera->enable(TIME_STEP);
 }
 
 // get values from distance sensors
@@ -74,6 +78,13 @@ void Epuck::getDistSensorReadings() {
         distSensorReadings[FRONT] = distSensors[FRONT]->getValue();
         distSensorReadings[FRONTRIGHT] = distSensors[FRONTRIGHT]->getValue();
         distSensorReadings[FRONTLEFT] = distSensors[FRONTLEFT]->getValue();
+
+        cout << "LEFT: " << distSensorReadings[LEFT] << endl;
+        cout << "RIGHT: " <<distSensorReadings[RIGHT] << endl;
+        cout << "FRONT: " <<distSensorReadings[FRONT] << endl;
+        cout << "FRONTLEFT: " <<distSensorReadings[FRONTLEFT] << endl;
+        cout << "FRONTRIGHT: " <<distSensorReadings[FRONTRIGHT] << endl;
+        cout << endl;
 
         if (validDistReadings()) {
             break;

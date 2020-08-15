@@ -536,10 +536,6 @@ DEF z1234567 E-puck {
   camera_width 320
   camera_height 240
   turretSlot [
-    InertialUnit {
-    }
-    GPS {
-    }
     DistanceSensor {
       rotation 0 1 0 1.27
       name "Front Right Distance Sensor"
