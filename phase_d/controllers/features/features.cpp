@@ -22,11 +22,16 @@ int main(int argc, char **argv) {
   
     cout << "Exploring map" << endl;
     emap->explore(robot);
-    cout << "Map Explored" << endl;
+    cout << "EXPLORED:\n";
+    emap->print2DVector(emap->getExplored());
+    // emap->print2DVector(emap->getHWalls());
+    // emap->print2DVector(emap->getVWalls());
+    
+    // cout << "Map Explored" << endl;
     // emap->print2DVector(emap->getExplored());
-    cout << "Finding path" << endl;
+    // cout << "Finding path" << endl;
     // PathFinding::generatePath();
-    cout << "Moving" << endl;
+    // cout << "Moving" << endl;
     // epuck.runSim(true);
     cout << "Complete" << endl;
     return 0;

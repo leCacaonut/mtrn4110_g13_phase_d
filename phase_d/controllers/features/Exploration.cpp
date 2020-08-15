@@ -10,7 +10,9 @@
 #endif
 
 ExploreMap::ExploreMap() {
-    explored.resize(5, vector<bool>(9, false));
+    explored.resize(1, vector<bool>(1, false));
+    hWalls.resize(2, vector<bool>(1, false));
+    vWalls.resize(1, vector<bool>(2, false));
     setDefaultGoal();
 }
 
@@ -65,33 +67,71 @@ vector<vector<bool>> ExploreMap::getVWalls() {
 }
 
 void ExploreMap::setWalls(int position[2], char heading, char* walls) {
-       switch (heading) {
+    cout << "BEFORE: " << endl;
+    print2DVector(hWalls);
+    print2DVector(vWalls);
+
+    switch (heading) {
         case 'N':
-            // if (lWall) hWalls = true;
+            if (walls[FRONT] == 'Y') addHWall(position[0], position[1]);
+            if (walls[LEFT]  == 'Y') addVWall(position[0], position[1]);
+            if (walls[RIGHT] == 'Y') addVWall(position[0], position[1] + 1);
+            if (walls[FRONT] == 'N') removeHWall(position[0], position[1]);
+            if (walls[LEFT]  == 'N') removeVWall(position[0], position[1]);
+            if (walls[RIGHT] == 'N') removeVWall(position[0], position[1] + 1);
             break;
         case 'S':
+            if (walls[FRONT] == 'Y') addHWall(position[0] + 1, position[1]);
+            if (walls[LEFT]  == 'Y') addVWall(position[0], position[1] + 1);
+            if (walls[RIGHT] == 'Y') addVWall(position[0], position[1]);
+            if (walls[FRONT] == 'N') removeHWall(position[0], position[1]);
+            if (walls[LEFT]  == 'N') removeVWall(position[0], position[1]);
+            if (walls[RIGHT] == 'N') removeVWall(position[0], position[1] + 1);
             break;
         case 'W':
+            if (walls[FRONT] == 'Y') addVWall(position[0], position[1]);
+            if (walls[LEFT]  == 'Y') addHWall(position[0] + 1, position[1]);
+            if (walls[RIGHT] == 'Y') addHWall(position[0], position[1]);
+            if (walls[FRONT] == 'N') removeVWall(position[0], position[1]);
+            if (walls[LEFT]  == 'N') removeHWall(position[0], position[1]);
+            if (walls[RIGHT] == 'N') removeHWall(position[0], position[1] + 1);
             break;
         case 'E':
+            if (walls[FRONT] == 'Y') addVWall(position[0], position[1] + 1);
+            if (walls[LEFT]  == 'Y') addHWall(position[0], position[1]);
+            if (walls[RIGHT] == 'Y') addHWall(position[0] + 1, position[1]);
+            if (walls[FRONT] == 'N') removeVWall(position[0], position[1]);
+            if (walls[LEFT]  == 'N') removeHWall(position[0], position[1]);
+            if (walls[RIGHT] == 'N') removeHWall(position[0], position[1] + 1);
             break;
         default:
-            break;
+            cout << "Failed to set walls" << endl;
     }
+    cout << "AFTER: " << endl;
+    print2DVector(hWalls);
+    print2DVector(vWalls);
 }
 
 // set a wall to be true
 // if outside of the size of the map, pushback
-bool ExploreMap::addWall(int row, int col) {
-    return true;
+void ExploreMap::addHWall(int row, int col) {
+    hWalls[row][col] = true;
 }
 
-bool ExploreMap::removeWall(int row, int col) {
-    return true;
+void ExploreMap::addVWall(int row, int col) {
+    vWalls[row][col] = true;
+}
+
+void ExploreMap::removeHWall(int row, int col) {
+    hWalls[row][col] = false;
+}
+
+void ExploreMap::removeVWall(int row, int col) {
+    vWalls[row][col] = false;
 }
 
 void ExploreMap::print2DVector(vector<vector<bool>> p) {
-    cout << "Vector H:\n";
+    cout << "Vector:\n";
     for (unsigned int i = 0; i < p.size(); i++) {
         for (unsigned int j = 0; j < p[i].size(); j++) {
             cout << p[i][j];
@@ -101,21 +141,26 @@ void ExploreMap::print2DVector(vector<vector<bool>> p) {
     cout << "\n";
 }
 
-template<typename T>
+template <typename T>
 void ExploreMap::explore(T& robot) {
-    // instead of defining variables here, integrate with the robot class using its getter functions
     int currentLocation[2] = {0, 0};
-    char heading;
+    char heading; // assume an initial heading of south
     char* walls;
 
     setExplored(currentLocation[0], currentLocation[1]);
-
+    heading = 'S';
     robot.getDistSensorReadings();
     walls = robot.getWalls();
+    cout << walls << endl;
     setWalls(currentLocation, heading, walls);
+
     robot.rotateRobot('R');
+    
+    heading = 'W';
     robot.getDistSensorReadings();
     walls = robot.getWalls();
+    cout << walls << endl;
+    setWalls(currentLocation, heading, walls);
     // use a left wall follower. 
     // if returned to the start position
     //      find closest unexplored grid

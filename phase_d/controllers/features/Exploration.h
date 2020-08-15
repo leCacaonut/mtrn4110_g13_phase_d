@@ -19,11 +19,15 @@ using namespace std;
 #endif
 
 #ifndef ROW
-    #define ROW 0
+#define ROW 0
 #endif
 #ifndef COL
-    #define COL 1
+#define COL 1
 #endif
+
+#define LEFT 0
+#define RIGHT 1
+#define FRONT 2
 
 class ExploreMap {
 private:
@@ -51,8 +55,10 @@ public:
     vector<vector<bool>> getVWalls();
 
     void setWalls(int position[2], char heading, char* walls);
-    bool addWall(int row, int col);
-    bool removeWall(int row, int col);
+    void addHWall(int row, int col);
+    void addVWall(int row, int col);
+    void removeHWall(int row, int col);
+    void removeVWall(int row, int col);
     void print2DVector(vector<vector<bool>> p);
 
     template <typename T>
