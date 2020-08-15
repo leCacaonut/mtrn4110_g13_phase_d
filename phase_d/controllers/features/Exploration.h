@@ -47,12 +47,15 @@ public:
     void setGoal(int row, int col);
     void setExplored(int row, int col);
 
+    void resize2DVector(vector<vector<bool>> &v, unsigned int numRows, unsigned int numCols);
+
     int* getMapSize();
     int* getGoal();
     vector<vector<bool>> getExplored();
     bool getExplored(int row, int col);
     vector<vector<bool>> getHWalls();
     vector<vector<bool>> getVWalls();
+    int* size2DVector(int* s, vector<vector<bool>> p);
 
     void setWalls(int position[2], char heading, char* walls);
     void addHWall(int row, int col);

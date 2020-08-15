@@ -24,8 +24,8 @@ int main(int argc, char **argv) {
     emap->explore(robot);
     cout << "EXPLORED:\n";
     emap->print2DVector(emap->getExplored());
-    // emap->print2DVector(emap->getHWalls());
-    // emap->print2DVector(emap->getVWalls());
+    emap->print2DVector(emap->getHWalls());
+    emap->print2DVector(emap->getVWalls());
     
     // cout << "Map Explored" << endl;
     // emap->print2DVector(emap->getExplored());
