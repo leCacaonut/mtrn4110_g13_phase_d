@@ -245,6 +245,33 @@ void Epuck::avoidObstacles(int obstacleLocation) {
     }
 }
 
+// correct robot position if too near or too far from the wall
+void Epuck::correctRobot() {
+    // too near to the wall
+    if (distSensorReadings[LEFT] < 750) {
+        motors[LMOTOR]->setVelocity(SPEED_FORWARD);
+        motors[RMOTOR]->setVelocity(SPEED_FORWARD-0.05);
+    }
+    if (distSensorReadings[RIGHT] < 750) {
+        motors[LMOTOR]->setVelocity(SPEED_FORWARD-0.05);
+        motors[RMOTOR]->setVelocity(SPEED_FORWARD);
+    }
+    // too far from the wall
+    if (distSensorReadings[LEFT] != 1000 && distSensorReadings[LEFT] >800) {
+        motors[LMOTOR]->setVelocity(SPEED_FORWARD-0.05);
+        motors[RMOTOR]->setVelocity(SPEED_FORWARD);
+    }
+    if (distSensorReadings[RIGHT] != 1000 && distSensorReadings[RIGHT] >800) {
+        motors[LMOTOR]->setVelocity(SPEED_FORWARD);
+        motors[RMOTOR]->setVelocity(SPEED_FORWARD-0.05);
+    }
+    // if at centre, same speed
+    if (distSensorReadings[RIGHT] < 780 && distSensorReadings[LEFT] < 780) {
+        motors[LMOTOR]->setVelocity(SPEED_FORWARD);
+        motors[RMOTOR]->setVelocity(SPEED_FORWARD);
+    }
+}
+
 void Epuck::moveRobot(double numberOfMotions, bool avoidingObstacle) {
     double lTarget = motorPosition[LMOTOR] + DIST_FORWARD * numberOfMotions;
     double rTarget = motorPosition[RMOTOR] + DIST_FORWARD * numberOfMotions;
@@ -254,27 +281,33 @@ void Epuck::moveRobot(double numberOfMotions, bool avoidingObstacle) {
     // set new position
     motors[LMOTOR]->setPosition(lTarget);
     motors[RMOTOR]->setPosition(rTarget);
-    
+    int num =0;
     // wait for robot to reach position
     while (robot->step(TIME_STEP) != -1) {
         getPosSensorReadings();
         double lPos = posSensorReadings[LMOTOR];
         double rPos = posSensorReadings[RMOTOR];
         getDistSensorReadings();
+
+        // calculate how many steps left 
+        if (avoidingObstacle == false) {
+            num = round((lTarget - lPos)/DIST_FORWARD);
+            correctRobot();
+        }
         // if front has obstacles
         if(distSensorReadings[FRONTLEFT] < WALL_DETECTED && distSensorReadings[FRONT] == WALL_DETECTED && avoidingObstacle == false) {
             avoidObstacles(FRONTLEFT);
             getPosSensorReadings();
-            lTarget = posSensorReadings[LMOTOR] + DIST_FORWARD * (numberOfMotions-1);
-            rTarget = posSensorReadings[RMOTOR] + DIST_FORWARD * (numberOfMotions-1);
+            lTarget = posSensorReadings[LMOTOR] + DIST_FORWARD * (num-1);
+            rTarget = posSensorReadings[RMOTOR] + DIST_FORWARD * (num-1);
             motors[LMOTOR]->setPosition(lTarget);
             motors[RMOTOR]->setPosition(rTarget);
             
         } else if (distSensorReadings[FRONTRIGHT] < WALL_DETECTED && distSensorReadings[FRONT] == WALL_DETECTED && avoidingObstacle == false) {
             avoidObstacles(FRONTRIGHT);
             getPosSensorReadings();
-            lTarget = posSensorReadings[LMOTOR] + DIST_FORWARD * (numberOfMotions-1);
-            rTarget = posSensorReadings[RMOTOR] + DIST_FORWARD * (numberOfMotions-1);
+            lTarget = posSensorReadings[LMOTOR] + DIST_FORWARD * (num-1);
+            rTarget = posSensorReadings[RMOTOR] + DIST_FORWARD * (num-1);
             motors[LMOTOR]->setPosition(lTarget);
             motors[RMOTOR]->setPosition(rTarget);
         }

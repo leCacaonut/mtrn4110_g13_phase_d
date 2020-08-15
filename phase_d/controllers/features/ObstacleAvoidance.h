@@ -83,7 +83,6 @@ class Epuck {
     int gridPosition[2];
     double motorPosition[2];
     char walls[3];
-    double motorPositionDifference[2];
     
 
    public:
@@ -115,4 +114,5 @@ class Epuck {
     //obstacle avoidance
     void avoidObstacles(int obstacleLocation);
     void moveHalfStep();
+    void correctRobot();
 };

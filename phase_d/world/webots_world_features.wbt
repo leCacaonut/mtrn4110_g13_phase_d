@@ -2,8 +2,8 @@
 WorldInfo {
 }
 Viewpoint {
-  orientation -1 0 0 1.5708003061004252
-  position 0 2.4984008606371138 -1.9832893001947556e-06
+  orientation -1 0 0 1.5808003061004254
+  position 0 2.2909208603671347 -0.022912209294537453
 }
 TexturedBackground {
 }
@@ -16,15 +16,21 @@ RectangleArena {
 DEF MAZE Group {
   children [
     OilBarrel {
-      translation -0.55 0.025 -0.29
+      translation -0.555493 0.025 -0.285
       height 0.05
-      radius 0.03
+      radius 0.025
     }
     OilBarrel {
-      translation -0.04 0.025 -0.27
+      translation -0.0457427 0.025 -0.26817
       name "oil barrel(1)"
       height 0.05
-      radius 0.03
+      radius 0.025
+    }
+    OilBarrel {
+      translation 0.39684 0.025 -0.0361442
+      name "oil barrel(3)"
+      height 0.05
+      radius 0.025
     }
     DEF cornerStone Solid {
       translation -0.7424999999999818 0.032499426115087944 -0.4124999999999812
@@ -373,7 +379,7 @@ DEF MAZE Group {
     DEF hBlock MazeBlock {
       translation 0.33000000000033514 -1.071251835915027e-05 0.082500000009498
       rotation -4.145440029961702e-08 0.999999999999999 1.4846999338983554e-08 4.797606087056097e-09
-      name "maze block(62)"
+      name "maze block(7)"
       length 0.14
     }
     DEF hBlock MazeBlock {
@@ -415,8 +421,8 @@ DEF MAZE Group {
     DEF vBlock MazeBlock {
       translation -0.9049999999905025 -1.0712518359136391e-05 -0.3300000000003353
       rotation 2.3240361606637417e-17 1 -4.6753744122056884e-17 1.5707996986971804
-      name "maze block(78)"
-      length 0.14
+      name "maze block(5)"
+      length 0.06
     }
     DEF vBlock MazeBlock {
       translation -0.4124999999905017 -1.071251835914333e-05 -3.3543975292378124e-13
