@@ -109,4 +109,5 @@ public:
     void rotateRobot(char command);
     void smoothPath();
     void displayStatus();
+    void followWallStep();
 };

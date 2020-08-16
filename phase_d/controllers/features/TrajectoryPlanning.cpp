@@ -417,6 +417,22 @@ void Epuck::smoothPath() {
     endCommand = commands.length();
 }
 
+void Epuck::followWallStep() {
+    updateWalls();
+    if (walls[LEFT] == 'Y') {
+        if (walls[FRONT] == 'N') moveRobot();
+        else if (walls[FRONT] == 'Y') {
+            rotateRobot('R');
+            updateWalls();
+            followWallStep();
+        }
+    }
+    if (walls[LEFT] == 'N') {
+        rotateRobot('L');
+        moveRobot();
+    }
+}
+
 /* 
  * Runs simulation by incrementing through provided commands
  * and navigating robot

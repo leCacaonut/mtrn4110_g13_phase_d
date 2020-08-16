@@ -166,7 +166,7 @@ int* ExploreMap::size2DVector(int* s, vector<vector<bool>> p) {
 template <typename T>
 void ExploreMap::explore(T& robot) {
     int currentLocation[2] = {0, 0};
-    char heading; // assume an initial heading of south
+    char heading = 'S'; // assume an initial heading of south
     char* walls;
     // int mapSize[2];
 
@@ -178,28 +178,32 @@ void ExploreMap::explore(T& robot) {
     // setWalls(currentLocation, heading, walls);
 
     setExplored(0, 0);
-    setExplored(0, 1);
+    // setExplored(0, 1);
     // setExplored(1, 0);
-    setExplored(1, 1);
-    setExplored(1, 2);
+    // setExplored(1, 1);
+    // setExplored(1, 2);
     // setExplored(2, 1);
-    setExplored(2, 2);
     // setExplored(2, 2);
-    
+    // setExplored(2, 2);
+
+    // setWalls(currentLocation, heading, robot.getWalls());
+
     // robot.rotateRobot('L');
     // heading = 'E';
     // robot.getDistSensorReadings();
     // walls = robot.getWalls();
     // cout << walls << endl;
+    // setExplored(0, 0);
     // setWalls(currentLocation, heading, walls);
 
     // robot.moveRobot();
-    // currentLocation[0] = 1;
+    // currentLocation[1] = 1;
     // setExplored(currentLocation[0], currentLocation[1]);
-    // heading = 'S';
+    // heading = 'E';
     // robot.getDistSensorReadings();
     // walls = robot.getWalls();
     // cout << walls << endl;
+    // setExplored(0, 1);
     // setWalls(currentLocation, heading, walls);
 
 
@@ -208,4 +212,5 @@ void ExploreMap::explore(T& robot) {
     // if returned to the start position
     //      find closest unexplored grid
     //      use path finding to get there
+    for (int i = 0; i < 40; ++i) robot.followWallStep();
 }
