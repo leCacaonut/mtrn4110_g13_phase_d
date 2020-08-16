@@ -29,6 +29,9 @@ using namespace std;
 #define RIGHT 1
 #define FRONT 2
 
+#define TOPLEFT 0
+#define TOPRIGHT 1
+
 class ExploreMap {
 private:
     int mapSize[2];
@@ -63,6 +66,7 @@ public:
     void removeHWall(int row, int col);
     void removeVWall(int row, int col);
     void print2DVector(vector<vector<bool>> p);
+    void rotateMap();
 
     template <typename T>
     void explore(T& robot);

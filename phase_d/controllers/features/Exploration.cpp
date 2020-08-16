@@ -52,12 +52,37 @@ void ExploreMap::resize2DVector(vector<vector<bool>>& v, unsigned int numRows, u
 }
 
 void ExploreMap::setExplored(int row, int col) {
-    if (row >= getMapSize()[0] || col >= getMapSize()[1]) {
-        resize2DVector(explored, row + 1, col + 1);
-        resize2DVector(hWalls, row + 2, col + 1);
-        resize2DVector(vWalls, row + 1, col + 2);
+    cout << getMapSize()[0] << "and col " << getMapSize()[1] << endl;
+    cout << "ABS " << abs(col) << endl;
+    if (abs(row) >= getMapSize()[0] || abs(col) >= getMapSize()[1]) {
+        resize2DVector(explored, abs(row) + 1, abs(col) + 1);
+        resize2DVector(hWalls, abs(row) + 2, abs(col) + 1);
+        resize2DVector(vWalls, abs(row) + 1, abs(col) + 2);
     }
-    explored[row][col] = true;
+    explored[abs(row)][abs(col)] = true;
+}
+
+void ExploreMap::rotateMap() {
+    cout << explored[0][0] << endl;
+    bool flipped[getMapSize()[0]][getMapSize()[1]];
+
+    // flip map
+    for(int i = 0; i < getMapSize()[0]; i++) {
+        for(int j = 0; j < getMapSize()[1]; j++) {
+            flipped[i][j] = explored[i][getMapSize()[1]-1-j];
+            cout << flipped[i][j];
+        }
+        cout << endl;
+    }
+
+    // copy to explored
+    for(int i = 0; i < getMapSize()[0]; i++) {
+        for(int j = 0; j < getMapSize()[1]; j++) {
+            explored[i][j] = flipped[i][j];
+        }
+    }
+
+
 }
 
 int* ExploreMap::getMapSize() {
@@ -168,6 +193,7 @@ void ExploreMap::explore(T& robot) {
     int currentLocation[2] = {0, 0};
     char heading; // assume an initial heading of south
     char* walls;
+    int robotLocation;
     // int mapSize[2];
 
     // setExplored(currentLocation[0], currentLocation[1]);
@@ -177,13 +203,21 @@ void ExploreMap::explore(T& robot) {
     // cout << walls << endl;
     // setWalls(currentLocation, heading, walls);
 
+    // should be in a loop
     setExplored(0, 0);
-    setExplored(0, 1);
-    // setExplored(1, 0);
-    setExplored(1, 1);
-    setExplored(1, 2);
-    // setExplored(2, 1);
-    setExplored(2, 2);
+    setExplored(0, -1);
+    setExplored(1, -1);
+    setExplored(1, -2);
+    setExplored(2, -2);
+
+    robotLocation = TOPRIGHT;
+    // if col is negativs
+    if(robotLocation == TOPRIGHT) {
+        rotateMap();
+        currentLocation[0] = 0;
+        currentLocation[1] = getMapSize()[1];
+    }
+
     // setExplored(2, 2);
     
     // robot.rotateRobot('L');
