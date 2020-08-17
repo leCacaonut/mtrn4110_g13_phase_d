@@ -3,7 +3,7 @@ the final phase of the assignment
 
 ## Setup
 * Any version of python 3
-* Have Anaconda installed
+* Have Anaconda installed and added to path in environments
 * Webots should be linked to open with a .wbt file
 * Windows 10
 
