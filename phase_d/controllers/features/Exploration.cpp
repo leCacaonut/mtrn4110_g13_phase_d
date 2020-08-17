@@ -41,24 +41,24 @@ void ExploreMap::setGoal(int row, int col) {
 void ExploreMap::resize2DVector(vector<vector<bool>>& v, unsigned int numRows, unsigned int numCols) {
     while (v.size() < numRows) {
         v.push_back(vector<bool>(numCols, false));
-        cout << "POOSH" << endl;
     }
     for (unsigned int i = 0; i < v.size(); ++i) {
         while (v[i].size() < numCols) {
             v[i].push_back(false);
-            cout << "PUSH" << endl;
         }
     }
 }
 
-void ExploreMap::setExplored(int row, int col) {
-
+void ExploreMap::setExplored(int v[2], char heading, char* walls) {
+    int& row = v[0];
+    int& col = v[1];
     if (abs(row) >= getMapSize()[0] || abs(col) >= getMapSize()[1]) {
         resize2DVector(explored, abs(row) + 1, abs(col) + 1);
         resize2DVector(hWalls, abs(row) + 2, abs(col) + 1);
         resize2DVector(vWalls, abs(row) + 1, abs(col) + 2);
     }
     explored[abs(row)][abs(col)] = true;
+    setWalls(v, heading, walls);
 }
 
 vector<vector<bool>> ExploreMap::rotateMap(vector<vector<bool>> matrix) {
@@ -237,102 +237,88 @@ int* ExploreMap::size2DVector(int* s, vector<vector<bool>> p) {
     return s;
 }
 
-char ExploreMap::getHeading(char currentHeading, char rotateDirection) {
-    switch (currentHeading) {
-        case 'N':
-            (rotateDirection == 'R') ? currentHeading = 'E' : currentHeading = 'W';
-            break;
-        case 'S':
-            (rotateDirection == 'R') ? currentHeading = 'W' : currentHeading = 'E';
-            break;
-        case 'E':
-            (rotateDirection == 'R') ? currentHeading = 'S' : currentHeading = 'N';
-            break;
-        case 'W':
-            (rotateDirection == 'R') ? currentHeading = 'N' : currentHeading = 'S';
-            break;
-        default:
-            // cout << "Invalid Heading in updateHeading" << endl;
-            break;
-    }
-    return currentHeading;
-
-}
-
 template <typename T>
 void ExploreMap::explore(T& robot) {
-    int currentLocation[2] = {0, 0};
-    char heading = 'S'; // assume an initial heading of south
-    char* walls;
-    // int mapSize[2];
-    int robotLocation;
+    int initialPosition[2] = {0, 0};
+    int* gridPosition = robot.getPosition();
+    char* walls = robot.getWalls();
+    char heading = robot.getHeading();
+    setExplored(gridPosition, heading, walls);
+
+    // do {
+    //     robot.followWallStep();
+    //     gridPosition = robot.getPosition();
+    //     walls = robot.getWalls();
+    //     heading = robot.getHeading();
+    //     cout << ": " << gridPosition[ROW] << ": " << gridPosition[COL] << ": " << heading << endl;
+    //     setExplored(gridPosition[ROW], gridPosition[COL]);
+    //     setWalls(gridPosition, heading, walls);
+    // } while (!(initialPosition[0] == gridPosition[0] && initialPosition[1] == gridPosition[1]));
+    for (int i = 0; i < 21; ++i) {
+        robot.followWallStep();
+        gridPosition = robot.getPosition();
+        walls = robot.getWalls();
+        heading = robot.getHeading();
+        cout << ": " << gridPosition[ROW] << ": " << gridPosition[COL] << ": " << heading << endl;
+        setExplored(gridPosition, heading, walls);
+    }
 
     // assumptions
-    robotLocation = TOPLEFT;
+    int robotLocation = TOPLEFT;
 
-    setExplored(0, 0);
+    // while(true) {
+    //     if(walls[FRONT] == 'Y') {
+    //         // turn left if front has wall
+    //         robot.rotateRobot('L');
+    //         robot.getDistSensorReadings();
+    //         walls = robot.getWalls();
+    //         heading = getHeading(heading, 'L');
+    //     } else {
+    //         robot.moveRobot();
+    //         robot.getDistSensorReadings();
+    //         walls = robot.getWalls();
+    //         if (heading == 'S') {
+    //             currentLocation[0]++;
+    //         } else if (heading == 'E') {
+    //             currentLocation[1]++;
+    //         } else if (heading == 'W') {
+    //             currentLocation[1]--;
+    //         } else if (heading == 'N') {
+    //             currentLocation[0]--;
+    //         }
+    //     }
 
-    // TESTING...
-    // walls[0] = [LEFT] -> RIGHT -> FRONT
-    setExplored(currentLocation[0], currentLocation[1]);
-    robot.getDistSensorReadings();
-    walls = robot.getWalls();
-    setWalls(currentLocation, heading, walls);
-
-    while(true) {
-        if(walls[FRONT] == 'Y') {
-            // turn left if front has wall
-            robot.rotateRobot('L');
-            robot.getDistSensorReadings();
-            walls = robot.getWalls();
-            heading = getHeading(heading, 'L');
-        } else {
-            robot.moveRobot();
-            robot.getDistSensorReadings();
-            walls = robot.getWalls();
-            if (heading == 'S') {
-                currentLocation[0]++;
-            } else if (heading == 'E') {
-                currentLocation[1]++;
-            } else if (heading == 'W') {
-                currentLocation[1]--;
-            } else if (heading == 'N') {
-                currentLocation[0]--;
-            }
-        }
-
-        if (currentLocation[1] < 0) {
+        if (robot.getPosition()[1] < 0) {
             robotLocation = TOPRIGHT;
         }
 
-        cout << currentLocation[0] << " , " << currentLocation[1] << endl;
-        cout << heading << endl;
-        setExplored(currentLocation[0], currentLocation[1]);
-        setWalls(currentLocation, heading, walls);
-        cout << "LEFT: " << walls[LEFT] << " RIGHT: " << walls[RIGHT] << " FRONT: " << walls[FRONT] << endl;
-        if (currentLocation[0] == 0 && currentLocation[1] == 0) break;
-    }
-    // TESTING...
+    //     cout << currentLocation[0] << " , " << currentLocation[1] << endl;
+    //     cout << heading << endl;
+    //     setExplored(currentLocation[0], currentLocation[1]);
+    //     setWalls(currentLocation, heading, walls);
+    //     cout << "LEFT: " << walls[LEFT] << " RIGHT: " << walls[RIGHT] << " FRONT: " << walls[FRONT] << endl;
+    //     if (currentLocation[0] == 0 && currentLocation[1] == 0) break;
+    // }
+    // // TESTING...
 
     // if col is negative
-    if(robotLocation == TOPRIGHT) {
-        vector<vector<bool>> rExplored;
-        vector<vector<bool>> rvWalls;
-        vector<vector<bool>> rhWalls;
+    // if(robotLocation == TOPRIGHT) {
+    //     vector<vector<bool>> rExplored;
+    //     vector<vector<bool>> rvWalls;
+    //     vector<vector<bool>> rhWalls;
 
-        rExplored = rotateMap(explored);
-        setRotatedExplored(rExplored);
-        rhWalls = rotateMap(hWalls);
-        print2DVector(rhWalls);
-        setRotatedhWalls(rhWalls);
-        rvWalls = swapColumns(vWalls);
-        rvWalls = rotateMap(rvWalls);
-        setRotatedvWalls(rvWalls);
-    }
+    //     rExplored = rotateMap(explored);
+    //     setRotatedExplored(rExplored);
+    //     rhWalls = rotateMap(hWalls);
+    //     print2DVector(rhWalls);
+    //     setRotatedhWalls(rhWalls);
+    //     rvWalls = swapColumns(vWalls);
+    //     rvWalls = rotateMap(rvWalls);
+    //     setRotatedvWalls(rvWalls);
+    // }
 
     // use a left wall follower. 
     // if returned to the start position
     //      find closest unexplored grid
     //      use path finding to get there
-    for (int i = 0; i < 40; ++i) robot.followWallStep();
 }

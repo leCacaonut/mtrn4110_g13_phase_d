@@ -49,7 +49,7 @@ public:
 
     void setDefaultGoal();
     void setGoal(int row, int col);
-    void setExplored(int row, int col);
+    void setExplored(int v[2], char heading, char* walls);
 
     void resize2DVector(vector<vector<bool>> &v, unsigned int numRows, unsigned int numCols);
 

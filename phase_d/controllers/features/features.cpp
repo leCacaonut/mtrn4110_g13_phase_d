@@ -18,6 +18,7 @@ using namespace std;
 
 int main(int argc, char **argv) {
     Epuck robot = Epuck();
+    
     unique_ptr<ExploreMap> emap(new ExploreMap());
   
     cout << "Exploring map" << endl;

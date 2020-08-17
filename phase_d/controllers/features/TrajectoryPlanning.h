@@ -22,6 +22,7 @@ using namespace std;
 #define WALL_DETECTED 1000
 #define YAW_INDEX 2
 #define DEVIATION 0.01
+#define COLLISION 750
 
 // initialising constants (index of instructions in file)
 #define INIT_ROW 0
@@ -97,9 +98,15 @@ public:
     void updateWalls();
     void updatePosition();
     void updateHeading();
+    void updateHeading(char command);
     void updateSurroundings();
+    // set functions
+    void setHeading(char h);
+    void setPosition(int pos[2]);
     // return functions
     char *getWalls();
+    char getHeading();
+    int *getPosition();
     // navigation
     void moveRobot(); // moves grid length
     void moveRobot(unsigned int numberOfMotions); // smooth move grid length
