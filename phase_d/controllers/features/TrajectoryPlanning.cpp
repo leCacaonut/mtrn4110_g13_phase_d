@@ -223,7 +223,7 @@ void Epuck::moveRobot() {
 
     // update grid position and walls
     // dont update position if the move is considered improper
-    cout << lTarget - initialPosition << "\t:\t" << (posSensorReadings[LMOTOR] - initialPosition) / 2 << endl;
+    // cout << lTarget - initialPosition << "\t:\t" << (posSensorReadings[LMOTOR] - initialPosition) / 2 << endl;
 
     if (posSensorReadings[LMOTOR] - initialPosition > (lTarget - initialPosition) / 3) {
         updatePosition();

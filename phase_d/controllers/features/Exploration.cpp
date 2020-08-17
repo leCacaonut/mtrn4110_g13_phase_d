@@ -221,7 +221,7 @@ void ExploreMap::removeVWall(int row, int col) {
 }
 
 void ExploreMap::print2DVector(vector<vector<bool>> p) {
-    cout << "Vector:\n";
+    // cout << "Vector:\n";
     for (unsigned int i = 0; i < p.size(); i++) {
         for (unsigned int j = 0; j < p[i].size(); j++) {
             cout << p[i][j];
@@ -244,78 +244,47 @@ void ExploreMap::explore(T& robot) {
     char* walls = robot.getWalls();
     char heading = robot.getHeading();
     setExplored(gridPosition, heading, walls);
+    int robotLocation = TOPLEFT;
 
-    // do {
-    //     robot.followWallStep();
-    //     gridPosition = robot.getPosition();
-    //     walls = robot.getWalls();
-    //     heading = robot.getHeading();
-    //     cout << ": " << gridPosition[ROW] << ": " << gridPosition[COL] << ": " << heading << endl;
-    //     setExplored(gridPosition[ROW], gridPosition[COL]);
-    //     setWalls(gridPosition, heading, walls);
-    // } while (!(initialPosition[0] == gridPosition[0] && initialPosition[1] == gridPosition[1]));
-    for (int i = 0; i < 21; ++i) {
+    do {
         robot.followWallStep();
         gridPosition = robot.getPosition();
         walls = robot.getWalls();
         heading = robot.getHeading();
         cout << ": " << gridPosition[ROW] << ": " << gridPosition[COL] << ": " << heading << endl;
         setExplored(gridPosition, heading, walls);
-    }
-
-    // assumptions
-    int robotLocation = TOPLEFT;
-
-    // while(true) {
-    //     if(walls[FRONT] == 'Y') {
-    //         // turn left if front has wall
-    //         robot.rotateRobot('L');
-    //         robot.getDistSensorReadings();
-    //         walls = robot.getWalls();
-    //         heading = getHeading(heading, 'L');
-    //     } else {
-    //         robot.moveRobot();
-    //         robot.getDistSensorReadings();
-    //         walls = robot.getWalls();
-    //         if (heading == 'S') {
-    //             currentLocation[0]++;
-    //         } else if (heading == 'E') {
-    //             currentLocation[1]++;
-    //         } else if (heading == 'W') {
-    //             currentLocation[1]--;
-    //         } else if (heading == 'N') {
-    //             currentLocation[0]--;
-    //         }
-    //     }
-
         if (robot.getPosition()[1] < 0) {
             robotLocation = TOPRIGHT;
         }
-
-    //     cout << currentLocation[0] << " , " << currentLocation[1] << endl;
-    //     cout << heading << endl;
-    //     setExplored(currentLocation[0], currentLocation[1]);
-    //     setWalls(currentLocation, heading, walls);
-    //     cout << "LEFT: " << walls[LEFT] << " RIGHT: " << walls[RIGHT] << " FRONT: " << walls[FRONT] << endl;
-    //     if (currentLocation[0] == 0 && currentLocation[1] == 0) break;
+    } while (!(initialPosition[0] == gridPosition[0] && initialPosition[1] == gridPosition[1]));
+    // for (int i = 0; i < 21; ++i) {
+    //     robot.followWallStep();
+    //     gridPosition = robot.getPosition();
+    //     walls = robot.getWalls();
+    //     heading = robot.getHeading();
+    //     cout << ": " << gridPosition[ROW] << ": " << gridPosition[COL] << ": " << heading << endl;
+    //     setExplored(gridPosition, heading, walls);
+    //     if (robot.getPosition()[1] < 0) {
+    //         robotLocation = TOPRIGHT;
+    //     }
     // }
-    // // TESTING...
+
 
     // if col is negative
-    // if(robotLocation == TOPRIGHT) {
-    //     vector<vector<bool>> rExplored;
-    //     vector<vector<bool>> rvWalls;
-    //     vector<vector<bool>> rhWalls;
+    if(robotLocation == TOPRIGHT) {
+        vector<vector<bool>> rExplored;
+        vector<vector<bool>> rvWalls;
+        vector<vector<bool>> rhWalls;
 
-    //     rExplored = rotateMap(explored);
-    //     setRotatedExplored(rExplored);
-    //     rhWalls = rotateMap(hWalls);
-    //     print2DVector(rhWalls);
-    //     setRotatedhWalls(rhWalls);
-    //     rvWalls = swapColumns(vWalls);
-    //     rvWalls = rotateMap(rvWalls);
-    //     setRotatedvWalls(rvWalls);
-    // }
+        rExplored = rotateMap(explored);
+        setRotatedExplored(rExplored);
+        rhWalls = rotateMap(hWalls);
+        print2DVector(rhWalls);
+        setRotatedhWalls(rhWalls);
+        rvWalls = swapColumns(vWalls);
+        rvWalls = rotateMap(rvWalls);
+        setRotatedvWalls(rvWalls);
+    }
 
     // use a left wall follower. 
     // if returned to the start position
