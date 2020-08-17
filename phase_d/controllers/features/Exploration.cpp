@@ -39,9 +39,12 @@ void ExploreMap::setGoal(int row, int col) {
 }
 
 void ExploreMap::resize2DVector(vector<vector<bool>>& v, unsigned int numRows, unsigned int numCols) {
+
+    //change v.push_back(vector<bool>(numCols, false)) -> v.push_back(vector<bool>(v[0].size(), false));
     while (v.size() < numRows) {
-        v.push_back(vector<bool>(numCols, false));
+        v.push_back(vector<bool>(v[0].size(), false));
     }
+
     for (unsigned int i = 0; i < v.size(); ++i) {
         while (v[i].size() < numCols) {
             v[i].push_back(false);
@@ -253,8 +256,9 @@ void ExploreMap::explore(T& robot) {
     heading = robot.getHeading();
     cout << ": " << gridPosition[ROW] << ": " << gridPosition[COL] << ": " << heading << endl;
     setExplored(gridPosition, heading, walls);
-    
+    int i=0;
     do {
+        i++;
         robot.followWallStep();
         gridPosition = robot.getPosition();
         walls = robot.getWalls();
@@ -264,7 +268,8 @@ void ExploreMap::explore(T& robot) {
         if (robot.getPosition()[1] < 0) {
             robotLocation = TOPRIGHT;
         }
-    } while (!(initialPosition[0] == gridPosition[0] && initialPosition[1] == gridPosition[1]));
+    } while(i < 21);
+    // while (!(initialPosition[0] == gridPosition[0] && initialPosition[1] == gridPosition[1]));
     // for (int i = 0; i < 21; ++i) {
     //     robot.followWallStep();
     //     gridPosition = robot.getPosition();
