@@ -3,7 +3,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -1 0 0 1.5808003061004254
-  position 0 2.2909208603671347 -0.022912209294537453
+  position 0 2.1083004168293744 -0.02108521720799894
 }
 TexturedBackground {
 }
@@ -15,20 +15,32 @@ RectangleArena {
 }
 DEF MAZE Group {
   children [
+    RubberDuck {
+      translation -0.556204 0.01 -0.294406
+      rotation 0 1 0 -3.141592653589793
+      scale 0.65
+    }
     OilBarrel {
-      translation -0.555493 0.025 -0.285
+      translation 0.551804 0.025 0.0503178
+      name "oil barrel(4)"
       height 0.05
       radius 0.025
     }
     OilBarrel {
-      translation -0.0457427 0.025 -0.26817
-      name "oil barrel(1)"
+      translation -0.0477535 0.025 -0.26307
+      name "oil barrel(6)"
+      height 0.05
+      radius 0.025
+    }
+    OilBarrel {
+      translation -0.392883 0.025 -0.375664
+      name "oil barrel(5)"
       height 0.05
       radius 0.025
     }
     OilBarrel {
       translation 0.39684 0.025 -0.0361442
-      name "oil barrel(3)"
+      name "oil barrel(1)"
       height 0.05
       radius 0.025
     }
@@ -542,11 +554,11 @@ DEF z1234567 E-puck {
   camera_height 240
   turretSlot [
     DistanceSensor {
-      rotation 0 1 0 1.27
+      rotation 0 1 0 1.2699996938995748
       name "Front Right Distance Sensor"
     }
     DistanceSensor {
-      rotation 0 1 0 1.87
+      rotation 0 1 0 1.8700003061004253
       name "Front Left Distance Sensor"
     }
     DistanceSensor {
