@@ -472,51 +472,22 @@ void Epuck::smoothPath() {
 }
 
 void Epuck::followWallStep() {
-    static bool firstStep = true;
     static bool turned = true;
-    static bool followStyleLeft;
     updateWalls();
-    if (firstStep && walls[LEFT] == true) {
-        followStyleLeft = true;
-        firstStep = !firstStep;
-    } else {
-        followStyleLeft = false;
-        firstStep = !firstStep;
-    }
-
-    if (followStyleLeft) {
-        if (walls[LEFT] == 'Y') {
-            turned = true;
-            if (walls[FRONT] == 'N') {
-                moveRobot();
-            } else if (walls[FRONT] == 'Y') {
-                rotateRobot('R');
-            }
-        } else if (walls[LEFT] == 'N') {
-            if (turned == true) {
-                rotateRobot('L');
-                turned = false;
-            } else {
-                moveRobot();
-                turned = true;
-            }
+    if (walls[LEFT] == 'Y') {
+        turned = true;
+        if (walls[FRONT] == 'N') {
+            moveRobot();
+        } else if (walls[FRONT] == 'Y') {
+            rotateRobot('R');
         }
-    } else {
-        if (walls[RIGHT] == 'Y') {
+    } else if (walls[LEFT] == 'N') {
+        if (turned == true) {
+            rotateRobot('L');
+            turned = false;
+        } else {
+            moveRobot();
             turned = true;
-            if (walls[FRONT] == 'N') {
-                moveRobot();
-            } else if (walls[FRONT] == 'Y') {
-                rotateRobot('L');
-            }
-        } else if (walls[RIGHT] == 'N') {
-            if (turned == true) {
-                rotateRobot('R');
-                turned = false;
-            } else {
-                moveRobot();
-                turned = true;
-            }
         }
     }
 }

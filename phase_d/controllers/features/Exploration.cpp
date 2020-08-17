@@ -246,6 +246,14 @@ void ExploreMap::explore(T& robot) {
     setExplored(gridPosition, heading, walls);
     int robotLocation = TOPLEFT;
 
+    // make a first move without while loop conditional
+    robot.followWallStep();
+    gridPosition = robot.getPosition();
+    walls = robot.getWalls();
+    heading = robot.getHeading();
+    cout << ": " << gridPosition[ROW] << ": " << gridPosition[COL] << ": " << heading << endl;
+    setExplored(gridPosition, heading, walls);
+    
     do {
         robot.followWallStep();
         gridPosition = robot.getPosition();
