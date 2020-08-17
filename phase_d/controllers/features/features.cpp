@@ -25,10 +25,10 @@ int main(int argc, char **argv) {
     emap->explore(robot);
     cout << "EXPLORED:\n";
     emap->print2DVector(emap->getExplored());
-    cout << "H WALLS:\n";
-    emap->print2DVector(emap->getHWalls());
-    cout << "V WALLS:\n";
-    emap->print2DVector(emap->getVWalls());
+    // cout << "H WALLS:\n";
+    // emap->print2DVector(emap->getHWalls());
+    // cout << "V WALLS:\n";
+    // emap->print2DVector(emap->getVWalls());
     
     // cout << "Map Explored" << endl;
     // emap->print2DVector(emap->getExplored());

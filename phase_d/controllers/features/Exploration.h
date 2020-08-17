@@ -1,78 +1,49 @@
-/*
-*  Wall detection will have to include border wall
-*/
-
-
-// includes
-#include <cmath>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <string>
-
-// Namespaces
-using namespace std;
-
-// Defined path to command file provided
-#ifndef MAP_FILE_NAME
-    #define MAP_FILE_NAME "../../Map.txt"
-#endif
-
-#ifndef ROW
-#define ROW 0
-#endif
-#ifndef COL
-#define COL 1
-#endif
-
-#define LEFT 0
-#define RIGHT 1
-#define FRONT 2
-
-#define TOPLEFT 0
-#define TOPRIGHT 1
 
 class ExploreMap {
-private:
+   private:
     int mapSize[2];
     int goal[2];
-    vector<vector<bool>> colZeroVWalls;
+    vector<int> emptyGrid{2, 0};
 
-    vector<vector<bool>> explored;
+    vector<vector<bool>> exploredMap;
     vector<vector<bool>> hWalls;
     vector<vector<bool>> vWalls;
 
-public:
+   public:
     ExploreMap();
     ExploreMap(int row, int col);
     ~ExploreMap();
 
+    // setters
     void setDefaultGoal();
     void setGoal(int row, int col);
     void setExplored(int v[2], char heading, char* walls);
 
-    void resize2DVector(vector<vector<bool>> &v, unsigned int numRows, unsigned int numCols);
-
+    // getters
     int* getMapSize();
     int* getGoal();
-    vector<vector<bool>> getExplored();
     bool getExplored(int row, int col);
+    vector<vector<bool>> getExplored();
     vector<vector<bool>> getHWalls();
     vector<vector<bool>> getVWalls();
-    int* size2DVector(int* s, vector<vector<bool>> p);
 
+    // sizing functions
+    int* size2DVector(int* s, vector<vector<bool>> v);
+    void resize2DVector(vector<vector<bool>>& v, unsigned int numRows, unsigned int numCols);
+    void print2DVector(vector<vector<bool>> v);
+
+    // functions
     void setWalls(int position[2], char heading, char* walls);
     void addHWall(int row, int col);
     void addVWall(int row, int col);
     void removeHWall(int row, int col);
     void removeVWall(int row, int col);
-    void print2DVector(vector<vector<bool>> p);
-    vector<vector<bool>> rotateMap(vector<vector<bool>> matrix);
-    char getHeading(char currentHeading, char rotateDirection);
-    vector<vector<bool>> swapColumns(vector<vector<bool>> matrix);
-    void setRotatedExplored(vector<vector<bool>> p);
-    void setRotatedhWalls(vector<vector<bool>> p);
-    void setRotatedvWalls(vector<vector<bool>> p);
+    vector<vector<bool>> flipMap(vector<vector<bool>> v);
+    vector<vector<bool>> swapColumns(vector<vector<bool>> v);
+    bool gridValid(int row, int col);
+    bool findEmptyGrid();
+
+    // main function
     template <typename T>
     void explore(T& robot);
 };

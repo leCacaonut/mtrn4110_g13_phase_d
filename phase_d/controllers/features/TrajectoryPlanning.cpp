@@ -429,6 +429,11 @@ void Epuck::setPosition(int pos[2]) {
     gridPosition[COLUMN] = pos[COLUMN];
 }
 
+void Epuck::setPosition(vector<int> pos) {
+    gridPosition[ROW] = pos[ROW];
+    gridPosition[COLUMN] = pos[COLUMN];
+}
+
 char* Epuck::getWalls() {
     return walls;
 }

@@ -42,11 +42,11 @@ using namespace std;
 #define DIST_ROTATE (PI / 4 * AXLE_LEN / WHEEL_RAD)
 #define SPEED_FORWARD MAX_SPEED
 #define SPEED_ROTATE (0.4 * MAX_SPEED)
-#define GRID_GAP ((LEN_SQUARE - AXLE_LEN) / 2) // the gap between the wheel and the edge of the grid when robot placed in the centre of the grid
+#define GRID_GAP ((LEN_SQUARE - AXLE_LEN) / 2)  // the gap between the wheel and the edge of the grid when robot placed in the centre of the grid
 #define LR_WHEEL_ROTATE_RATIO (GRID_GAP / (GRID_GAP + AXLE_LEN))
 #define CORR_FACTOR_2 0.05
-#define SMALL_ROTATE ((PI / 4 * 2 * GRID_GAP / WHEEL_RAD) + CORR_FACTOR_2 * LR_WHEEL_ROTATE_RATIO) // with rough correction factor
-#define LARGE_ROTATE ((PI / 4 * 2 * (GRID_GAP + AXLE_LEN) / WHEEL_RAD) + CORR_FACTOR_2) // with rough correction factor
+#define SMALL_ROTATE ((PI / 4 * 2 * GRID_GAP / WHEEL_RAD) + CORR_FACTOR_2 * LR_WHEEL_ROTATE_RATIO)  // with rough correction factor
+#define LARGE_ROTATE ((PI / 4 * 2 * (GRID_GAP + AXLE_LEN) / WHEEL_RAD) + CORR_FACTOR_2)             // with rough correction factor
 
 // Defined path to command file provided
 #define PATH_PLAN_FILE_NAME "../../PathPlan.txt"
@@ -55,12 +55,12 @@ enum WallIDs { LEFT,
                RIGHT,
                FRONT } wIDs;  // wall position indexing
 typedef enum PositionIDs { ROW,
-                   COLUMN } pIDs;  // used to index position array
+                           COLUMN } pIDs;  // used to index position array
 enum MotorIDs { LMOTOR,
                 RMOTOR } mIDs;  // index left and right motors
 
 class Epuck {
-private:
+   private:
     Robot *robot;
     Motor *motors[2];
     DistanceSensor *distSensors[3];
@@ -77,11 +77,10 @@ private:
     double motorPosition[2];
     char walls[3];
 
-public:
+   public:
     Epuck();
 
     ~Epuck();
-
 
     // run simulation
     void runSim(bool smooth);
@@ -103,14 +102,15 @@ public:
     // set functions
     void setHeading(char h);
     void setPosition(int pos[2]);
+    void setPosition(vector<int> pos);
     // return functions
     char *getWalls();
     char getHeading();
     int *getPosition();
     // navigation
-    void moveRobot(); // moves grid length
-    void moveRobot(unsigned int numberOfMotions); // smooth move grid length
-    void moveRobot(unsigned int numberOfMotions, bool moveHalfGrid); // smooth move half grid length
+    void moveRobot();                                                 // moves grid length
+    void moveRobot(unsigned int numberOfMotions);                     // smooth move grid length
+    void moveRobot(unsigned int numberOfMotions, bool moveHalfGrid);  // smooth move half grid length
     void rotateRobot();
     void rotateRobot(bool smoothGridTurn);
     void rotateRobot(char command);
