@@ -29,10 +29,14 @@ using namespace std;
 #define RIGHT 1
 #define FRONT 2
 
+#define TOPLEFT 0
+#define TOPRIGHT 1
+
 class ExploreMap {
 private:
     int mapSize[2];
     int goal[2];
+    vector<vector<bool>> colZeroVWalls;
 
     vector<vector<bool>> explored;
     vector<vector<bool>> hWalls;
@@ -63,7 +67,12 @@ public:
     void removeHWall(int row, int col);
     void removeVWall(int row, int col);
     void print2DVector(vector<vector<bool>> p);
-
+    vector<vector<bool>> rotateMap(vector<vector<bool>> matrix);
+    char getHeading(char currentHeading, char rotateDirection);
+    vector<vector<bool>> swapColumns(vector<vector<bool>> matrix);
+    void setRotatedExplored(vector<vector<bool>> p);
+    void setRotatedhWalls(vector<vector<bool>> p);
+    void setRotatedvWalls(vector<vector<bool>> p);
     template <typename T>
     void explore(T& robot);
 };

@@ -1,6 +1,5 @@
-#VRML_SIM R2020b utf8
+#VRML_SIM R2020a utf8
 WorldInfo {
-  coordinateSystem "NUE"
 }
 Viewpoint {
   orientation -1 0 0 1.5708003061004252
@@ -519,10 +518,6 @@ DEF MAZE Group {
   ]
 }
 DEF z1234567 E-puck {
-  hidden position_0_0 141.86327999999577
-  hidden position_0_1 155.2020000000042
-  hidden rotation_1 -1 0 0 3.633203242044866
-  hidden rotation_2 -1 0 0 4.405552627694129
   translation -0.66 0 -0.33
   rotation 0.0004201749619184547 0.9999998224615687 -0.0004225279075033802 3.14159
   controller "features"

@@ -68,6 +68,7 @@ void Epuck::getDistSensorReadings() {
         distSensorReadings[RIGHT] = distSensors[RIGHT]->getValue();
         distSensorReadings[FRONT] = distSensors[FRONT]->getValue();
 
+        // cout << distSensorReadings[FRONT] << endl;
         if (validDistReadings()) {
             break;
         }
@@ -142,7 +143,7 @@ void Epuck::updatePosition() {
             gridPosition[COLUMN] -= 1;
             break;
         default:
-            cout << "Invalid Heading in updatePosition" << endl;
+            // cout << "Invalid Heading in updatePosition" << endl;
             break;
     }
 }
@@ -163,7 +164,7 @@ void Epuck::updateHeading() {
             (currCommand == 'R') ? heading = 'N' : heading = 'S';
             break;
         default:
-            cout << "Invalid Heading in updateHeading" << endl;
+            // cout << "Invalid Heading in updateHeading" << endl;
             break;
     }
 }
