@@ -18,6 +18,8 @@ Epuck::Epuck() {
     // position sensors
     posSensors[LMOTOR] = robot->getPositionSensor("left wheel sensor");
     posSensors[RMOTOR] = robot->getPositionSensor("right wheel sensor");
+    // IMU
+    IMU = robot->getInertialUnit("inertial unit");
 
     enableSensors();         // enable sensors
     updateWalls();           // get wall status
@@ -58,6 +60,8 @@ void Epuck::enableSensors() {
     // enable position sensors
     posSensors[LMOTOR]->enable(TIME_STEP);
     posSensors[RMOTOR]->enable(TIME_STEP);
+    // enable IMU
+    IMU->enable(TIME_STEP);
 }
 
 // get values from distance sensors
@@ -87,6 +91,16 @@ void Epuck::getPosSensorReadings() {
     }
 }
 
+void Epuck::getIMUReadings() {
+    while (robot->step(TIME_STEP) != -1) {
+        yaw = IMU->getRollPitchYaw()[2];
+
+        if (validIMUReadings()) {
+            break;
+        }
+    }
+}
+
 // check if distance sensor readings are valid
 bool Epuck::validDistReadings() {
     int sensorIndex = 0;
@@ -107,6 +121,16 @@ bool Epuck::validPosReadings() {
     // check if position sensor readings are numbers
     if (posSensorReadings[LMOTOR] == NAN || posSensorReadings[RMOTOR] == NAN) {
         cout << "Invalid position sensor readings" << endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool Epuck::validIMUReadings() {
+    // check if position sensor readings are numbers
+    if (yaw == NAN) {
+        cout << "Invalid IMU sensor readings" << endl;
         return false;
     }
 
@@ -302,6 +326,9 @@ void Epuck::rotateRobot(bool smoothGridTurn) {
         // update grid position and walls
         updateHeading();
         updateWalls();
+
+        // adjust rotation
+        adjustRotation();
     }
 }
 
@@ -342,6 +369,9 @@ void Epuck::rotateRobot() {
     getPosSensorReadings();
     // update grid position and walls
     updateWalls();
+    cout <<"ROTATE" << endl;
+    // adjust rotation 
+    adjustRotation();
 }
 
 void Epuck::rotateRobot(char command) {
@@ -386,6 +416,52 @@ void Epuck::rotateRobot(char command) {
     // update grid position and walls
     updateHeading();
     updateWalls();
+    // adjust rotation
+    adjustRotation();
+}
+
+void Epuck::adjustRotation() {
+    //North      East     South    West      
+    double rBiggerValues[4] = {PI/4,-PI/4,(-3*PI)/4,(3*PI)/4};
+    double rSmallerValues[4] = {0,-PI/2,-PI,PI/2};
+    double lBiggerValues[4] = {0,-PI/2,PI,PI/2};
+    double lSmallerValues[4] = {-PI/4,-3*PI/4,3*PI/4,PI/4};
+    double biggerValues[4] = {0,-PI/2,-PI,PI/2};
+    double smallerValues[4] = {0,-PI/2,PI,PI/2};
+    int i=0;
+    int j=0;
+    double lTarget, rTarget;
+    lTarget = motorPosition[LMOTOR];
+    rTarget = motorPosition[RMOTOR];
+    while (robot->step(TIME_STEP) != -1) {
+        getIMUReadings();
+        for (i=0;i<4;i++) {
+            if (yaw < rBiggerValues[i] && yaw > rSmallerValues[i]) {
+                cout <<"Adjusting heading... TURN RIGHT " << endl;
+                lTarget = lTarget + DIST_ROTATE/180;
+                rTarget = rTarget - DIST_ROTATE/180;
+                motors[LMOTOR]->setPosition(lTarget);
+                motors[RMOTOR]->setPosition(rTarget);
+                j=i;
+            } else if (yaw < lBiggerValues[i] && yaw > lSmallerValues[i]) {
+                cout <<"Adjusting heading... TURN LEFT " << endl;
+                lTarget = lTarget - DIST_ROTATE/180;
+                rTarget = rTarget + DIST_ROTATE/180;
+                motors[LMOTOR]->setPosition(lTarget);
+                motors[RMOTOR]->setPosition(rTarget);
+                j=i;
+            }
+        }
+        i=0;
+        if (abs(yaw - biggerValues[j]) < DEVIATION_YAW || abs(yaw - smallerValues[j]) < DEVIATION_YAW) {
+            getIMUReadings();
+            getPosSensorReadings(); 
+            cout << "Final Yaw " <<yaw << endl;
+            motorPosition[LMOTOR] = posSensorReadings[LMOTOR];
+            motorPosition[RMOTOR] = posSensorReadings[RMOTOR];
+            break;
+        }
+    }
 }
 
 void Epuck::getCommands() {
