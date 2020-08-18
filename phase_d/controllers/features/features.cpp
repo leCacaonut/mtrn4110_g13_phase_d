@@ -21,17 +21,15 @@ int main(int argc, char **argv) {
     
     unique_ptr<ExploreMap> emap(new ExploreMap());
   
-    cout << "Exploring map" << endl;
+    cout << ">>> EXPLORING MAP <<<" << endl;
     emap->explore(robot);
-    cout << "EXPLORED:\n";
+    cout << "--- Explored map ---\n";
     emap->print2DVector(emap->getExplored());
-    // cout << "H WALLS:\n";
-    // emap->print2DVector(emap->getHWalls());
-    // cout << "V WALLS:\n";
-    // emap->print2DVector(emap->getVWalls());
+    cout << "--- Horizontal walls ---\n";
+    emap->print2DVector(emap->getHWalls());
+    cout << "--- Vertical walls ---\n";
+    emap->print2DVector(emap->getVWalls());
     
-    // cout << "Map Explored" << endl;
-    // emap->print2DVector(emap->getExplored());
     // cout << "Finding path" << endl;
     // PathFinding::generatePath();
     // cout << "Moving" << endl;

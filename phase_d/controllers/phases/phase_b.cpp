@@ -122,6 +122,8 @@ class Pathing {
                 // right and forwards!
                 ++heading;
                 instructionalPath.append("RF");
+            } else if (directionalPath[i] == num2heading(heading + 2)) {
+                instructionalPath.append("RRF");
             }
         }
         calculateExpense();
@@ -227,7 +229,79 @@ void generatePath() {
     cout << "Path: " << output << endl;
     _outputFile.close();
 }
+
+/*******************************************************************/
+
+void generatePath(char cHeading, int currentPosition[2], int targetPosition[2], vector<vector<bool>> vecHWalls, vector<vector<bool>> vecVWalls, string &instructions) {
+    int numRows = vecHWalls.size();
+    int numCols = vecVWalls[0].size();
+    bool hWalls[MAP_ROW + 1][MAP_COL] = {0};
+    bool vWalls[MAP_ROW][MAP_COL + 1] = {0};
+    
+    for (unsigned int i = 0; i < vecHWalls.size(); ++i) {
+        for (unsigned int j = 0; j < vecHWalls[0].size(); ++j) {
+            hWalls[i][j] = vecHWalls[i][j];
+        }
+    }
+
+    for (unsigned int i = 0; i < vecVWalls.size(); ++i) {
+        for (unsigned int j = 0; j < vecVWalls[0].size(); ++j) {
+            vWalls[i][j] = vecVWalls[i][j];
+        }
+    }
+
+    int cValues[MAP_ROW][MAP_COL] = {0};
+    // initialise a high value
+    for (int i = 0; i < numRows; ++i) {
+        for (int j = 0; j < numCols; ++j) {
+            cValues[i][j] = MAP_ROW * MAP_COL + 1;
+        }
+    }
+
+    int heading;
+    int* startingPos = &currentPosition[0];
+    int* goal = &targetPosition[0];
+    // NESW -> 0123
+    switch (cHeading) {
+        case 'N': heading = N; break;
+        case 'E': heading = E; break;
+        case 'S': heading = S; break;
+        case 'W': heading = W; break;
+        default: heading = S;
+    }
+
+    floodFillMap(cValues, hWalls, vWalls, startingPos, goal);
+
+    // cout << "--- Finding path ---" << endl;
+    vector<Pathing*> path = findPath(cValues, hWalls, vWalls, startingPos, heading, goal);
+
+    // process each path
+    for (unsigned int i = 0; i < path.size(); ++i) {
+        path[i]->processPath(heading);
+    }
+
+    // find the path with the least amount of turns (MAY NOT BE SHORTEST OVERALL INSTRUCTIONS)
+    // in this case, least 'expense'
+
+    int pathID = 0;
+    int exp = 99;
+    for (unsigned int i = 0; i < path.size(); ++i) {
+        if (path[i]->expense < exp) {
+            pathID = i;
+            exp = path[i]->expense;
+        }
+    }
+
+    // cout << "--- Generating path ---" << endl;
+    // printMap(cValues, hWalls, vWalls, startingPos, heading, path[pathID]);
+    // cout << "Steps: " << path[pathID]->instructionalPath.length() << endl;
+    // cout << "Path: " << cHeading << path[pathID]->instructionalPath << endl;
+
+    instructions = path[pathID]->instructionalPath;
+}
+
 }  // namespace PathFinding
+/************************************************************/
 
 void processMap(std::ifstream& mapfile, bool hWalls[MAP_ROW + 1][MAP_COL], bool vWalls[MAP_ROW][MAP_COL + 1], int startingPos[2], int& heading) {
     char ch;

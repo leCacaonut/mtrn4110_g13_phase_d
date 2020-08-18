@@ -38,6 +38,7 @@ class ExploreMap {
     void addVWall(int row, int col);
     void removeHWall(int row, int col);
     void removeVWall(int row, int col);
+    void addWallBorder();
     vector<vector<bool>> flipMap(vector<vector<bool>> v);
     vector<vector<bool>> swapColumns(vector<vector<bool>> v);
     bool gridValid(int row, int col);
