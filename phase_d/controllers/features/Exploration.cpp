@@ -219,6 +219,17 @@ void ExploreMap::removeVWall(int row, int col) {
     vWalls[abs(row)][abs(col)] = false;
 }
 
+void ExploreMap::addWallBorder() {
+    for (unsigned int i = 0; i < hWalls[0].size(); ++i) {
+        hWalls[0][i] = true;
+        hWalls[hWalls.size() - 1][i] = true;
+    }
+    for (unsigned int i = 0; i < vWalls.size(); ++i) {
+        vWalls[i][0] = true;
+        vWalls[i][vWalls[0].size() - 1] = true;
+    }
+}
+
 vector<vector<bool>> ExploreMap::flipMap(vector<vector<bool>> v) {
     int rowNum = v.size();
     int colNum = v[0].size();
@@ -229,9 +240,9 @@ vector<vector<bool>> ExploreMap::flipMap(vector<vector<bool>> v) {
     for (int i = 0; i < rowNum; i++) {
         for (int j = 0; j < colNum; j++) {
             flipped[i][j] = v[i][colNum - 1 - j];
-            cout << flipped[i][j];
+            // cout << flipped[i][j];
         }
-        cout << endl;
+        // cout << endl;
     }
     return flipped;
 }
@@ -249,11 +260,11 @@ vector<vector<bool>> ExploreMap::swapColumns(vector<vector<bool>> v) {
 }
 
 bool ExploreMap::gridValid(int row, int col) {
-    if ((hWalls[row][col] && 
-    hWalls[row + 1][col] && 
-    vWalls[row][col] && 
-    vWalls[row][col + 1]) ||
-    exploredMap[row][col]) {
+    if ((hWalls[row][col] &&
+         hWalls[row + 1][col] &&
+         vWalls[row][col] &&
+         vWalls[row][col + 1]) ||
+        exploredMap[row][col]) {
         return false;
     } else {
         return true;
@@ -266,7 +277,7 @@ bool ExploreMap::findEmptyGrid() {
     int cols = getMapSize()[COL] - 1;
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            if(gridValid(i, j)) {
+            if (gridValid(i, j)) {
                 emptyGrid[ROW] = i;
                 emptyGrid[COL] = j;
                 foundEmptyGrid = true;
@@ -274,14 +285,15 @@ bool ExploreMap::findEmptyGrid() {
             }
         }
     }
-    PRADATHEDEVIL:
+PRADATHEDEVIL:
     // if no empty grids found
     return foundEmptyGrid;
 }
 
 template <typename T>
 void ExploreMap::explore(T& robot) {
-    vector<int> initialPosition{0, 0};
+    int initialPosition[2] = {0, 0};
+    // vector<int> initialPosition{0, 0};
     char initialHeading = robot.getHeading();
     bool actualInitialPosition = TOP_LEFT;  // assume a default top left corner
 
@@ -290,12 +302,12 @@ void ExploreMap::explore(T& robot) {
     char heading = robot.getHeading();
     setExplored(gridPosition, heading, walls);
 
+    cout << "--- Mode: Left Wall Following ---" << endl;
     // make a first move without while loop conditional
     robot.followWallStep();
     gridPosition = robot.getPosition();
     walls = robot.getWalls();
     heading = robot.getHeading();
-    // cout << ": " << gridPosition[ROW] << ": " << gridPosition[COL] << ": " << heading << endl;
     setExplored(gridPosition, heading, walls);
 
     do {
@@ -303,25 +315,14 @@ void ExploreMap::explore(T& robot) {
         gridPosition = robot.getPosition();
         walls = robot.getWalls();
         heading = robot.getHeading();
-        // cout << ": " << gridPosition[ROW] << ": " << gridPosition[COL] << ": " << heading << endl;
         setExplored(gridPosition, heading, walls);
         if (robot.getPosition()[1] < 0) {
             actualInitialPosition = TOP_RIGHT;
         }
     } while (!(initialPosition[ROW] == gridPosition[ROW] && initialPosition[COL] == gridPosition[COL]));
-    // for (int i = 0; i < 21; ++i) {
-    //     robot.followWallStep();
-    //     gridPosition = robot.getPosition();
-    //     walls = robot.getWalls();
-    //     heading = robot.getHeading();
-    //     cout << ": " << gridPosition[ROW] << ": " << gridPosition[COL] << ": " << heading << endl;
-    //     setExplored(gridPosition, heading, walls);
-    //     if (robot.getPosition()[1] < 0) {
-    //         actualInitialPosition = TOP_RIGHT;
-    //     }
-    // } % use this loop for limited number of steps
 
     // Extra rotations to return to initial heading
+    cout << "--- Resetting Position ---" << endl;
     while (heading != initialHeading) {
         robot.rotateRobot('L');
         heading = robot.getHeading();
@@ -337,21 +338,91 @@ void ExploreMap::explore(T& robot) {
         vWalls = swapColumns(vWalls);
         vWalls = flipMap(vWalls);
     }
-    // cout << "Position: " << robot.getPosition()[ROW] << robot.getPosition()[COL] << endl;
+    addWallBorder();
 
+    cout << "--- Mode: Path Planning to Unexplored Grids ---" << endl;
     // map is now appropriately created
     // use a path planner to get to the closest empty grid
     // initial position will always be explored
     int* targetPosition = &emptyGrid[0];
+    string instructions;
+
     while (findEmptyGrid()) {
-        cout << "Target: [" << targetPosition[0] << ", " << targetPosition[1] << "]" << endl;
-        
-        
-        break;
+        // turn until robot faces an opening
+        if (walls[FRONT] == 'Y') {
+            if (walls[LEFT] == 'N') {
+                robot.rotateRobot('L');
+            } else if (walls[RIGHT] == 'N') {
+                robot.rotateRobot('R');
+            } else {
+                robot.rotateRobot('L');
+                robot.rotateRobot('L');
+            }
+        }
+        // find a path
+        PathFinding::generatePath(robot.getHeading(), robot.getPosition(), targetPosition, hWalls, vWalls, instructions);
+        // navigate towards path
+        for (unsigned int i = 0; i < instructions.length(); ++i) {
+            switch (instructions[i]) {
+                case 'F':
+                    robot.moveRobot();
+                    break;
+                case 'L':
+                    robot.rotateRobot('L');
+                    break;
+                case 'R':
+                    robot.rotateRobot('R');
+                    break;
+            }
+            
+            gridPosition = robot.getPosition();
+            walls = robot.getWalls();
+            heading = robot.getHeading();
+            setExplored(gridPosition, heading, walls);
+            // check walls
+            if (i != instructions.length()) {
+                switch (instructions[i + 1]) {
+                    case 'F':
+                        if (walls[FRONT] == 'Y') {
+                            goto FIND_NEW_PATH;
+                        }
+                        break;
+                    case 'L':
+                        if (walls[LEFT] == 'Y') {
+                            goto FIND_NEW_PATH;
+                        }
+                        break;
+                    case 'R':
+                        if (walls[RIGHT] == 'Y') {
+                            goto FIND_NEW_PATH;
+                        }
+                        break;
+                }
+            }
+        }
+    FIND_NEW_PATH:;
+        // cout << "Finding a new path" << endl;
     }
-    
-    // use a left wall follower.
-    // if returned to the start position
-    //      find closest unexplored grid
-    //      use path finding to get there
+    cout << ">>> RESETTING <<<\n--- Map Explored - Returning to Start ---" << endl;
+    PathFinding::generatePath(robot.getHeading(), robot.getPosition(), initialPosition, hWalls, vWalls, instructions);
+    for (unsigned int i = 0; i < instructions.length(); ++i) {
+        switch (instructions[i]) {
+            case 'F':
+                robot.moveRobot();
+                break;
+            case 'L':
+                robot.rotateRobot('L');
+                break;
+            case 'R':
+                robot.rotateRobot('R');
+                break;
+        }
+    }
+    while (heading != initialHeading) {
+        robot.rotateRobot('L');
+        heading = robot.getHeading();
+        cout << "HEAD::" << heading << endl;
+    }
+    // set the default goal after exploration
+    setDefaultGoal();
 }

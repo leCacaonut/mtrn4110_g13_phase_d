@@ -21,21 +21,18 @@ int main(int argc, char **argv) {
     
     unique_ptr<ExploreMap> emap(new ExploreMap());
   
-    cout << "Exploring map" << endl;
+    cout << ">>> EXPLORING MAP <<<" << endl;
     emap->explore(robot);
-    cout << "EXPLORED:\n";
+    cout << "--- Explored map ---\n";
     emap->print2DVector(emap->getExplored());
-    // cout << "H WALLS:\n";
-    // emap->print2DVector(emap->getHWalls());
-    // cout << "V WALLS:\n";
-    // emap->print2DVector(emap->getVWalls());
+    cout << "--- Horizontal walls ---\n";
+    emap->print2DVector(emap->getHWalls());
+    cout << "--- Vertical walls ---\n";
+    emap->print2DVector(emap->getVWalls());
     
-    // cout << "Map Explored" << endl;
-    // emap->print2DVector(emap->getExplored());
-    // cout << "Finding path" << endl;
-    // PathFinding::generatePath();
-    // cout << "Moving" << endl;
-    // epuck.runSim(true);
-    cout << "Complete" << endl;
+    cout << ">>> MOVING TO GOAL <<<" << endl;
+    PathFinding::generatePath(robot.getHeading(), robot.getPosition(), emap->getGoal(), emap->getHWalls(), emap->getVWalls());
+    robot.runSim(true);
+    cout << ">>> GOAL REACHED <<<" << endl;
     return 0;
 }

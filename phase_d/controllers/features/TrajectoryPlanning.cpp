@@ -525,10 +525,12 @@ void Epuck::runSim(bool smooth) {
     // generate a smooth path
     if (smooth) {
         smoothPath();
-        cout << commands << endl;
-        currCommand = commands[currCommandIndex];
-        rotateRobot();
+        // cout << commands << endl;
+        currCommand = commands[currCommandIndex - 1];
+        
+        if (currCommand == 'L' || currCommand == 'R') rotateRobot();
         moveRobot(0, true);
+
         while (true) {
             unsigned int numberOfMotions = 0;
             currCommand = commands[currCommandIndex];
@@ -549,6 +551,7 @@ void Epuck::runSim(bool smooth) {
             // if final command executed
             if (currCommandIndex == endCommand) break;
         }
+        
     } else {
         while (robot->step(TIME_STEP) != -1) {
             currCommand = commands[currCommandIndex];
