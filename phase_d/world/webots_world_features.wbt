@@ -36,18 +36,25 @@ DEF MAZE Group {
       }
     }
     OilBarrel {
-      translation 0.165247 0 -0.363661
+      translation 0.228764 0 -0.361897
+      name "oil barrel(4)"
       height 0.1
       radius 0.025
     }
     OilBarrel {
-      translation 0.388974 0 -0.0453378
+      translation 0.498717 0 -0.293086
+      name "oil barrel(3)"
+      height 0.1
+      radius 0.025
+    }
+    OilBarrel {
+      translation 0.422498 0 -0.0259295
       name "oil barrel(2)"
       height 0.1
       radius 0.025
     }
     OilBarrel {
-      translation -0.318245 0 -0.285581
+      translation -0.332359 0 -0.294402
       name "oil barrel(1)"
       height 0.1
       radius 0.025
