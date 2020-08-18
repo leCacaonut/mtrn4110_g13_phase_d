@@ -292,7 +292,8 @@ PRADATHEDEVIL:
 
 template <typename T>
 void ExploreMap::explore(T& robot) {
-    vector<int> initialPosition{0, 0};
+    int initialPosition[2] = {0, 0};
+    // vector<int> initialPosition{0, 0};
     char initialHeading = robot.getHeading();
     bool actualInitialPosition = TOP_LEFT;  // assume a default top left corner
 
@@ -345,6 +346,8 @@ void ExploreMap::explore(T& robot) {
     // initial position will always be explored
     int* targetPosition = &emptyGrid[0];
     string instructions;
+    robot.setHeading(initialHeading);
+
     while (findEmptyGrid()) {
         // turn until robot faces an opening
         if (walls[FRONT] == 'Y') {
@@ -359,10 +362,8 @@ void ExploreMap::explore(T& robot) {
         }
         // find a path
         PathFinding::generatePath(robot.getHeading(), robot.getPosition(), targetPosition, hWalls, vWalls, instructions);
-        cout << "Instructions: " << instructions << endl;
-        unsigned const int lenn = instructions.length();
         // navigate towards path
-        for (unsigned int i = 0; i < lenn; ++i) {
+        for (unsigned int i = 0; i < instructions.length(); ++i) {
             switch (instructions[i]) {
                 case 'F':
                     robot.moveRobot();
@@ -380,7 +381,7 @@ void ExploreMap::explore(T& robot) {
             heading = robot.getHeading();
             setExplored(gridPosition, heading, walls);
             // check walls
-            if (i != lenn) {
+            if (i != instructions.length()) {
                 switch (instructions[i + 1]) {
                     case 'F':
                         if (walls[FRONT] == 'Y') {
@@ -400,12 +401,27 @@ void ExploreMap::explore(T& robot) {
                 }
             }
         }
-    FIND_NEW_PATH:
-        cout << "Finding a new path" << endl;
+    FIND_NEW_PATH:;
+        // cout << "Finding a new path" << endl;
     }
-    cout << "Map Explored - Returning to Start" << endl;
-    // use a left wall follower.
-    // if returned to the start position
-    //      find closest unexplored grid
-    //      use path finding to get there
+    cout << ">>> RESETTING <<<\n --- Map Explored - Returning to Start ---" << endl;
+    PathFinding::generatePath(robot.getHeading(), robot.getPosition(), initialPosition, hWalls, vWalls, instructions);
+    for (unsigned int i = 0; i < instructions.length(); ++i) {
+        switch (instructions[i]) {
+            case 'F':
+                robot.moveRobot();
+                break;
+            case 'L':
+                robot.rotateRobot('L');
+                break;
+            case 'R':
+                robot.rotateRobot('R');
+                break;
+        }
+    }
+    while (heading != initialHeading) {
+        robot.rotateRobot('L');
+        heading = robot.getHeading();
+    }
+    
 }

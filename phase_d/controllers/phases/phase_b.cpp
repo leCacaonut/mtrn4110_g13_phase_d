@@ -17,7 +17,7 @@ using namespace std;
 using namespace webots;
 
 #define MAP_FILE_NAME "../../MapFound.txt"
-// #define PATH_PLAN_FILE_NAME "../../PathPlanFound.txt"
+#define PATH_PLAN_FILE_NAME "../../PathPlanFound.txt"
 #define MAP_ROW 5
 #define MAP_COL 9
 #if MAP_ROW % 2 == 0
@@ -123,6 +123,7 @@ class Pathing {
                 ++heading;
                 instructionalPath.append("RF");
             } else if (directionalPath[i] == num2heading(heading + 2)) {
+                heading += 2;
                 instructionalPath.append("RRF");
             }
         }
@@ -233,9 +234,6 @@ void generatePath() {
 /*******************************************************************/
 
 void generatePath(char cHeading, int* currentPosition, int targetPosition[2], vector<vector<bool>> vecHWalls, vector<vector<bool>> vecVWalls, string &instructions) {
-    cout << "CP: " << currentPosition[0] << currentPosition[1] << endl;
-    cout << "HD: " << cHeading << endl;
-    cout << "TG: " << targetPosition[0] << targetPosition[1] << endl;
     int numRows = vecHWalls.size();
     int numCols = vecVWalls[0].size();
     bool hWalls[MAP_ROW + 1][MAP_COL] = {0};
@@ -296,10 +294,10 @@ void generatePath(char cHeading, int* currentPosition, int targetPosition[2], ve
     }
 
     // cout << "--- Generating path ---" << endl;
-    // printMap(cValues, hWalls, vWalls, startingPos, heading, path[pathID]);
-    // cout << "Steps: " << path[pathID]->instructionalPath.length() << endl;
-    // cout << "Path: " << cHeading << path[pathID]->instructionalPath << endl;
-    cout << path[pathID]->directionalPath << endl;
+    ofstream outputFile(PATH_PLAN_FILE_NAME);
+    outputFile << startingPos[0] << startingPos[1] << h << path[pathID]->instructionalPath << endl;
+    outputFile.close();
+
     instructions = path[pathID]->instructionalPath;
 }
 

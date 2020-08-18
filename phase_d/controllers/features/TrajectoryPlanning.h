@@ -49,7 +49,7 @@ using namespace std;
 #define LARGE_ROTATE ((PI / 4 * 2 * (GRID_GAP + AXLE_LEN) / WHEEL_RAD) + CORR_FACTOR_2)             // with rough correction factor
 
 // Defined path to command file provided
-#define PATH_PLAN_FILE_NAME "../../PathPlan.txt"
+#define PATH_PLAN_FILE_NAME "../../PathPlanFound.txt"
 
 enum WallIDs { LEFT,
                RIGHT,
