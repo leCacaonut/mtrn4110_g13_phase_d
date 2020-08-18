@@ -301,7 +301,7 @@ void ExploreMap::explore(T& robot) {
     char heading = robot.getHeading();
     setExplored(gridPosition, heading, walls);
 
-    cout << "Mode: Left Wall Following" << endl;
+    cout << "--- Mode: Left Wall Following ---" << endl;
     // make a first move without while loop conditional
     robot.followWallStep();
     gridPosition = robot.getPosition();
@@ -319,9 +319,9 @@ void ExploreMap::explore(T& robot) {
             actualInitialPosition = TOP_RIGHT;
         }
     } while (!(initialPosition[ROW] == gridPosition[ROW] && initialPosition[COL] == gridPosition[COL]));
-    
+
     // Extra rotations to return to initial heading
-    cout << "Resetting Position" << endl;
+    cout << "--- Resetting Position ---" << endl;
     while (heading != initialHeading) {
         robot.rotateRobot('L');
         heading = robot.getHeading();
@@ -339,7 +339,7 @@ void ExploreMap::explore(T& robot) {
     }
     addWallBorder();
 
-    cout << "Mode: Path Planning" << endl;
+    cout << "--- Mode: Path Planning to Unexplored Grids ---" << endl;
     // map is now appropriately created
     // use a path planner to get to the closest empty grid
     // initial position will always be explored
@@ -360,24 +360,48 @@ void ExploreMap::explore(T& robot) {
         // find a path
         PathFinding::generatePath(robot.getHeading(), robot.getPosition(), targetPosition, hWalls, vWalls, instructions);
         cout << "Instructions: " << instructions << endl;
-
+        unsigned const int lenn = instructions.length();
         // navigate towards path
-        for (unsigned int i = 0; i < instructions.length(); ++i) {
+        for (unsigned int i = 0; i < lenn; ++i) {
+            switch (instructions[i]) {
+                case 'F':
+                    robot.moveRobot();
+                    break;
+                case 'L':
+                    robot.rotateRobot('L');
+                    break;
+                case 'R':
+                    robot.rotateRobot('R');
+                    break;
+            }
+            
             gridPosition = robot.getPosition();
             walls = robot.getWalls();
             heading = robot.getHeading();
             setExplored(gridPosition, heading, walls);
-            switch (instructions[i]) {
-                case 'F':
-                    
-                    robot.moveRobot();
-                    break;
-                case 'L':
-                    robot.rotateRobot('L'); break;
-                case 'R':
-                    robot.rotateRobot('R'); break;
+            // check walls
+            if (i != lenn) {
+                switch (instructions[i + 1]) {
+                    case 'F':
+                        if (walls[FRONT] == 'Y') {
+                            goto FIND_NEW_PATH;
+                        }
+                        break;
+                    case 'L':
+                        if (walls[LEFT] == 'Y') {
+                            goto FIND_NEW_PATH;
+                        }
+                        break;
+                    case 'R':
+                        if (walls[RIGHT] == 'Y') {
+                            goto FIND_NEW_PATH;
+                        }
+                        break;
+                }
             }
         }
+    FIND_NEW_PATH:
+        cout << "Finding a new path" << endl;
     }
     cout << "Map Explored - Returning to Start" << endl;
     // use a left wall follower.

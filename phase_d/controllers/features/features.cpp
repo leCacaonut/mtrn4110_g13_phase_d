@@ -23,12 +23,12 @@ int main(int argc, char **argv) {
   
     cout << ">>> EXPLORING MAP <<<" << endl;
     emap->explore(robot);
-    cout << "--- Explored map ---\n";
-    emap->print2DVector(emap->getExplored());
-    cout << "--- Horizontal walls ---\n";
-    emap->print2DVector(emap->getHWalls());
-    cout << "--- Vertical walls ---\n";
-    emap->print2DVector(emap->getVWalls());
+    // cout << "--- Explored map ---\n";
+    // emap->print2DVector(emap->getExplored());
+    // cout << "--- Horizontal walls ---\n";
+    // emap->print2DVector(emap->getHWalls());
+    // cout << "--- Vertical walls ---\n";
+    // emap->print2DVector(emap->getVWalls());
     
     // cout << "Finding path" << endl;
     // PathFinding::generatePath();

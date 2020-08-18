@@ -232,7 +232,10 @@ void generatePath() {
 
 /*******************************************************************/
 
-void generatePath(char cHeading, int currentPosition[2], int targetPosition[2], vector<vector<bool>> vecHWalls, vector<vector<bool>> vecVWalls, string &instructions) {
+void generatePath(char cHeading, int* currentPosition, int targetPosition[2], vector<vector<bool>> vecHWalls, vector<vector<bool>> vecVWalls, string &instructions) {
+    cout << "CP: " << currentPosition[0] << currentPosition[1] << endl;
+    cout << "HD: " << cHeading << endl;
+    cout << "TG: " << targetPosition[0] << targetPosition[1] << endl;
     int numRows = vecHWalls.size();
     int numCols = vecVWalls[0].size();
     bool hWalls[MAP_ROW + 1][MAP_COL] = {0};
@@ -296,7 +299,7 @@ void generatePath(char cHeading, int currentPosition[2], int targetPosition[2], 
     // printMap(cValues, hWalls, vWalls, startingPos, heading, path[pathID]);
     // cout << "Steps: " << path[pathID]->instructionalPath.length() << endl;
     // cout << "Path: " << cHeading << path[pathID]->instructionalPath << endl;
-
+    cout << path[pathID]->directionalPath << endl;
     instructions = path[pathID]->instructionalPath;
 }
 
