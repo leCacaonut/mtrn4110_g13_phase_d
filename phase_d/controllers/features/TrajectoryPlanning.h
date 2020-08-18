@@ -3,6 +3,7 @@
 #include <webots/Motor.hpp>
 #include <webots/PositionSensor.hpp>
 #include <webots/Robot.hpp>
+#include <webots/InertialUnit.hpp>
 
 // other includes
 #include <cmath>
@@ -23,6 +24,7 @@ using namespace std;
 #define YAW_INDEX 2
 #define DEVIATION 0.01
 #define COLLISION 750
+#define DEVIATION_YAW 0.005
 
 // initialising constants (index of instructions in file)
 #define INIT_ROW 0
@@ -65,6 +67,7 @@ class Epuck {
     Motor *motors[2];
     DistanceSensor *distSensors[3];
     PositionSensor *posSensors[2];
+    InertialUnit *IMU;
 
     string commands;
     int currCommandIndex;
@@ -76,6 +79,7 @@ class Epuck {
     int gridPosition[2];
     double motorPosition[2];
     char walls[3];
+    double yaw;
 
    public:
     Epuck();
@@ -91,8 +95,10 @@ class Epuck {
     // readings
     void getDistSensorReadings();
     void getPosSensorReadings();
+    void getIMUReadings();
     bool validDistReadings();
     bool validPosReadings();
+    bool validIMUReadings();
     // updates
     void updateWalls();
     void updatePosition();
@@ -117,4 +123,5 @@ class Epuck {
     void smoothPath();
     void displayStatus();
     void followWallStep();
+    void adjustRotation();
 };
