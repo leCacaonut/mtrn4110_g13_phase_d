@@ -47,7 +47,7 @@ DEF MAZE Group {
       radius 0.025
     }
     OilBarrel {
-      translation -0.318245 0 -0.287084
+      translation -0.318245 0 -0.285581
       name "oil barrel(1)"
       height 0.1
       radius 0.025
@@ -541,6 +541,8 @@ DEF z1234567 E-puck {
   camera_width 320
   camera_height 240
   turretSlot [
+    InertialUnit {
+    }
     DistanceSensor {
       rotation 0 1 0 1.27
       name "Front Right Distance Sensor"
