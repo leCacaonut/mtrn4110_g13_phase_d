@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
     emap->print2DVector(emap->getVWalls());
     
     cout << ">>> MOVING TO GOAL <<<" << endl;
-    PathFinding::generatePath();
+    PathFinding::generatePath(robot.getHeading(), robot.getPosition(), emap->getGoal(), emap->getHWalls(), emap->getVWalls());
     robot.runSim(true);
     cout << ">>> GOAL REACHED <<<" << endl;
     return 0;

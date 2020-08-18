@@ -17,7 +17,7 @@ using namespace std;
 using namespace webots;
 
 #define MAP_FILE_NAME "../../MapFound.txt"
-#define PATH_PLAN_FILE_NAME "../../PathPlanFound.txt"
+#define PATH_PLAN_FILE_NAME "../../PathPlan.txt"
 #define MAP_ROW 5
 #define MAP_COL 9
 #if MAP_ROW % 2 == 0
@@ -232,6 +232,71 @@ void generatePath() {
 }
 
 /*******************************************************************/
+void generatePath(char cHeading, int* currentPosition, int targetPosition[2], vector<vector<bool>> vecHWalls, vector<vector<bool>> vecVWalls) {
+    int numRows = vecHWalls.size();
+    int numCols = vecVWalls[0].size();
+    bool hWalls[MAP_ROW + 1][MAP_COL] = {0};
+    bool vWalls[MAP_ROW][MAP_COL + 1] = {0};
+    
+    for (unsigned int i = 0; i < vecHWalls.size(); ++i) {
+        for (unsigned int j = 0; j < vecHWalls[0].size(); ++j) {
+            hWalls[i][j] = vecHWalls[i][j];
+        }
+    }
+
+    for (unsigned int i = 0; i < vecVWalls.size(); ++i) {
+        for (unsigned int j = 0; j < vecVWalls[0].size(); ++j) {
+            vWalls[i][j] = vecVWalls[i][j];
+        }
+    }
+
+    int cValues[MAP_ROW][MAP_COL] = {0};
+    // initialise a high value
+    for (int i = 0; i < numRows; ++i) {
+        for (int j = 0; j < numCols; ++j) {
+            cValues[i][j] = MAP_ROW * MAP_COL + 1;
+        }
+    }
+
+    int heading;
+    int* startingPos = &currentPosition[0];
+    int* goal = &targetPosition[0];
+    // NESW -> 0123
+    switch (cHeading) {
+        case 'N': heading = N; break;
+        case 'E': heading = E; break;
+        case 'S': heading = S; break;
+        case 'W': heading = W; break;
+        default: heading = S;
+    }
+
+    floodFillMap(cValues, hWalls, vWalls, startingPos, goal);
+
+    // cout << "--- Finding path ---" << endl;
+    vector<Pathing*> path = findPath(cValues, hWalls, vWalls, startingPos, heading, goal);
+
+    // process each path
+    for (unsigned int i = 0; i < path.size(); ++i) {
+        path[i]->processPath(heading);
+    }
+
+    // find the path with the least amount of turns (MAY NOT BE SHORTEST OVERALL INSTRUCTIONS)
+    // in this case, least 'expense'
+
+    int pathID = 0;
+    int exp = 99;
+    for (unsigned int i = 0; i < path.size(); ++i) {
+        if (path[i]->expense < exp) {
+            pathID = i;
+            exp = path[i]->expense;
+        }
+    }
+    // export path to a text file
+    ofstream outputFile(PATH_PLAN_FILE_NAME);
+    outputFile << startingPos[0] << startingPos[1] << cHeading << path[pathID]->instructionalPath << endl;
+    outputFile.close();
+
+}
 
 void generatePath(char cHeading, int* currentPosition, int targetPosition[2], vector<vector<bool>> vecHWalls, vector<vector<bool>> vecVWalls, string &instructions) {
     int numRows = vecHWalls.size();
@@ -292,11 +357,6 @@ void generatePath(char cHeading, int* currentPosition, int targetPosition[2], ve
             exp = path[i]->expense;
         }
     }
-
-    // cout << "--- Generating path ---" << endl;
-    ofstream outputFile(PATH_PLAN_FILE_NAME);
-    outputFile << startingPos[0] << startingPos[1] << h << path[pathID]->instructionalPath << endl;
-    outputFile.close();
 
     instructions = path[pathID]->instructionalPath;
 }

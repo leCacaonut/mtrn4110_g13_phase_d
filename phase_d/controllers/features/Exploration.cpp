@@ -240,9 +240,9 @@ vector<vector<bool>> ExploreMap::flipMap(vector<vector<bool>> v) {
     for (int i = 0; i < rowNum; i++) {
         for (int j = 0; j < colNum; j++) {
             flipped[i][j] = v[i][colNum - 1 - j];
-            cout << flipped[i][j];
+            // cout << flipped[i][j];
         }
-        cout << endl;
+        // cout << endl;
     }
     return flipped;
 }
@@ -346,7 +346,6 @@ void ExploreMap::explore(T& robot) {
     // initial position will always be explored
     int* targetPosition = &emptyGrid[0];
     string instructions;
-    robot.setHeading(initialHeading);
 
     while (findEmptyGrid()) {
         // turn until robot faces an opening
@@ -404,7 +403,7 @@ void ExploreMap::explore(T& robot) {
     FIND_NEW_PATH:;
         // cout << "Finding a new path" << endl;
     }
-    cout << ">>> RESETTING <<<\n --- Map Explored - Returning to Start ---" << endl;
+    cout << ">>> RESETTING <<<\n--- Map Explored - Returning to Start ---" << endl;
     PathFinding::generatePath(robot.getHeading(), robot.getPosition(), initialPosition, hWalls, vWalls, instructions);
     for (unsigned int i = 0; i < instructions.length(); ++i) {
         switch (instructions[i]) {
@@ -422,6 +421,8 @@ void ExploreMap::explore(T& robot) {
     while (heading != initialHeading) {
         robot.rotateRobot('L');
         heading = robot.getHeading();
+        cout << "HEAD::" << heading << endl;
     }
-    
+    // set the default goal after exploration
+    setDefaultGoal();
 }
