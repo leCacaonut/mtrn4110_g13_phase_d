@@ -4,7 +4,7 @@ Run this python script to execute everything
 '''
 
 import subprocess as sp
-import codecs, re
+import sys, argparse, codecs, re
 
 def check_environment():
     env_list = sp.check_output(["conda", "info", "--envs"])
@@ -34,9 +34,17 @@ def convert_map():
     sp.run(R"run_phase_c.bat", shell=True)
     sp.run(R"echo Map exported", shell=True)
 
-def launch_webots():
+def launch_webots(x=0):
     print("Launching webots world...")
-    sp.run(R"phase_d\world\webots_world.wbt", shell=True)
+    if x == 0:
+        sp.run(R"phase_d\world\webots_world.wbt", shell=True)
+    elif x == 1:
+        sp.run(R"phase_d\world\webots_world_features.wbt", shell=True)
+    elif x == 2:
+        sp.run(R"phase_d\world\webots_world_manual.wbt", shell=True)
+    elif x == 3:
+        sp.run(R"phase_d\world\webots_world_.wbt", shell=True)
+
 
 def main():
 
@@ -49,9 +57,15 @@ def main():
             exit(-1)
     
     else:
+        parser = argparse.ArgumentParser()
+        parser.add_argument('integer', type=int, default=[0], nargs='*')
+        args = parser.parse_args()
+
+        print(args)
         sp.run(R"echo Running programs", shell=True)
-        convert_map()
-        launch_webots()
+        if args.integer[0] == 0:
+            convert_map()
+        launch_webots(args.integer[0])
 
 if __name__ == "__main__":
     main()
