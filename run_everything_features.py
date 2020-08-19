@@ -50,7 +50,7 @@ def main():
     
     else:
         sp.run(R"echo Running programs", shell=True)
-        convert_map()
+        # convert_map()
         launch_webots()
 
 if __name__ == "__main__":
