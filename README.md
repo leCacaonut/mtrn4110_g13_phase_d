@@ -15,14 +15,6 @@ the final phase of the assignment
 
 ## How to run features
 ###
-1. Run 'run_everything_features.py' with whatever python you have installed
+1. Run 'run_everything.py x' with whatever python you have installed, with x being a number greater than 0
 1. Initial run will install necessary files
 1. Subsequent runs will launch all files
-
-## The plan
-1. Exploration of the map, go back to start
-1. Add obstacles to the map
-1. Robot path plans to the goal
-1. Robot attempts to go to the goal with smooth motion
-    1. If obstacle, use motions from obstacle
-1. Reach goal
