@@ -1,10 +1,9 @@
-// Epuck class header file
 // webots include files
 #include <webots/DistanceSensor.hpp>
-#include <webots/InertialUnit.hpp>
 #include <webots/Motor.hpp>
 #include <webots/PositionSensor.hpp>
 #include <webots/Robot.hpp>
+#include <webots/InertialUnit.hpp>
 
 // other includes
 #include <cmath>
@@ -24,8 +23,7 @@ using namespace std;
 #define WALL_DETECTED 1000
 #define YAW_INDEX 2
 #define DEVIATION 0.01
-#define COLLISION 750
-#define DEVIATION_YAW 0.03
+#define DEVIATION_YAW 0.01
 
 // initialising constants (index of instructions in file)
 #define INIT_ROW 0
@@ -41,24 +39,26 @@ using namespace std;
 
 // Rotating and forward motion formulas
 #define DIST_FORWARD (LEN_SQUARE / WHEEL_RAD)
-// #define CORR_FACTOR_1 0.15
+#define CORR_FACTOR_1 0.15
 #define DIST_ROTATE (PI / 4 * AXLE_LEN / WHEEL_RAD)
 #define SPEED_FORWARD MAX_SPEED
 #define SPEED_ROTATE (0.4 * MAX_SPEED)
-#define GRID_GAP ((LEN_SQUARE - AXLE_LEN) / 2)  // the gap between the wheel and the edge of the grid when robot placed in the centre of the grid
+#define GRID_GAP ((LEN_SQUARE - AXLE_LEN) / 2) // the gap between the wheel and the edge of the grid when robot placed in the centre of the grid
 #define LR_WHEEL_ROTATE_RATIO (GRID_GAP / (GRID_GAP + AXLE_LEN))
 #define CORR_FACTOR_2 0.05
-#define SMALL_ROTATE ((PI / 4 * 2 * GRID_GAP / WHEEL_RAD) + CORR_FACTOR_2 * LR_WHEEL_ROTATE_RATIO)  // with rough correction factor
-#define LARGE_ROTATE ((PI / 4 * 2 * (GRID_GAP + AXLE_LEN) / WHEEL_RAD) + CORR_FACTOR_2)             // with rough correction factor
+#define SMALL_ROTATE ((PI / 4 * 2 * GRID_GAP / WHEEL_RAD) + CORR_FACTOR_2 * LR_WHEEL_ROTATE_RATIO) // with rough correction factor
+#define LARGE_ROTATE ((PI / 4 * 2 * (GRID_GAP + AXLE_LEN) / WHEEL_RAD) + CORR_FACTOR_2) // with rough correction factor
 
 // Defined path to command file provided
 #define PATH_PLAN_FILE_NAME "../../PathPlan.txt"
 
 enum WallIDs { LEFT,
                RIGHT,
-               FRONT } wIDs;  // wall position indexing
-typedef enum PositionIDs { ROW,
-                           COLUMN } pIDs;  // used to index position array
+               FRONT,
+               FRONTLEFT,
+               FRONTRIGHT } wIDs;  // wall position indexing
+enum PositionIDs { ROW,
+                   COLUMN } pIDs;  // used to index position array
 enum MotorIDs { LMOTOR,
                 RMOTOR } mIDs;  // index left and right motors
 
@@ -66,7 +66,7 @@ class Epuck {
    private:
     Robot *robot;
     Motor *motors[2];
-    DistanceSensor *distSensors[3];
+    DistanceSensor *distSensors[5];
     PositionSensor *posSensors[2];
     InertialUnit *IMU;
 
@@ -74,7 +74,7 @@ class Epuck {
     int currCommandIndex;
     char currCommand;
     int endCommand;
-    double distSensorReadings[3];
+    double distSensorReadings[5];
     double posSensorReadings[2];
     char heading;
     int gridPosition[2];
@@ -86,13 +86,14 @@ class Epuck {
     Epuck();
 
     ~Epuck();
+    
 
     // run simulation
     void runSim(bool smooth);
     // initialisation
     void readPath();
     void enableSensors();
-    void getCommands();
+    void setInitStatus();
     // readings
     void getDistSensorReadings();
     void getPosSensorReadings();
@@ -104,25 +105,18 @@ class Epuck {
     void updateWalls();
     void updatePosition();
     void updateHeading();
-    void updateHeading(char command);
     void updateSurroundings();
-    // set functions
-    void setHeading(char h);
-    void setPosition(int pos[2]);
-    void setPosition(vector<int> pos);
-    // return functions
-    char *getWalls();
-    char getHeading();
-    int *getPosition();
     // navigation
-    void moveRobot();                                                 // moves grid length
-    void moveRobot(unsigned int numberOfMotions);                     // smooth move grid length
-    void moveRobot(unsigned int numberOfMotions, bool moveHalfGrid);  // smooth move half grid length
-    void rotateRobot();
+    void moveRobot(); // moves grid length
+    void moveRobot(unsigned int numberOfMotions); // smooth move grid length
+    void moveRobot(double numberOfMotions, bool moveHalfGrid, bool avoidingObstacle); // smooth move half grid length
+    void rotateRobotWithCommand(char direction);
     void rotateRobot(bool smoothGridTurn);
-    void rotateRobot(char command);
     void smoothPath();
     void displayStatus();
-    void followWallStep();
+    //obstacle avoidance
+    void avoidObstacles(int obstacleLocation);
+    void moveHalfStep();
+    void correctRobot();
     void adjustRotation();
 };
