@@ -101,9 +101,6 @@ class Epuck {
     Epuck(int start_row, int start_col, char start_heading);
 
     ~Epuck();
-
-    // run simulation
-    void runSim(bool smooth);
     // initialisation
     void readPath();
     void enableSensors();
@@ -119,24 +116,8 @@ class Epuck {
     void updateWalls();
     void updatePosition();
     // void updateHeading(char command);
-    void updateSurroundings();
-    // set functions
-    void setHeading(char h);
-    void setPosition(int pos[2]);
-    void setPosition(vector<int> pos);
-    // return functions
-    char *getWalls();
-    char getHeading();
-    int *getPosition();
-    // navigation
     void moveRobot();                                                 // moves grid length
-    // void moveRobot(unsigned int numberOfMotions);                     // smooth move grid length
-    // void moveRobot(unsigned int numberOfMotions, bool moveHalfGrid);  // smooth move half grid length
-    // void rotateRobot(bool smoothGridTurn);
-    // void rotateRobot(char command);
-    void smoothPath();
-    void displayStatus();
-    void followWallStep();
+
     void adjustRotation();
     
     void genMap();
