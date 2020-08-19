@@ -1,7 +1,7 @@
 /* Adapted from phase A
 *  Trajectory planning for movement of robot
-*
-*
+*  Written by Thinesh Manisekaran
+*  Edited by Gordon Chen, Mei Yan Tang
 */
 #include "TrajectoryPlanning.h"
 
@@ -401,8 +401,8 @@ void Epuck::rotateRobot() {
     getPosSensorReadings();
     // update grid position and walls
     updateWalls();
-    cout <<"ROTATE" << endl;
-    // adjust rotation 
+    cout << "ROTATE" << endl;
+    // adjust rotation
     adjustRotation();
 }
 
@@ -431,12 +431,12 @@ void Epuck::rotateRobot(char command) {
 
     // wait for robot to reach position
     // while (robot->step(TIME_STEP) != -1) {
-    while(true) {
+    while (true) {
         getPosSensorReadings();
         double rPos = posSensorReadings[RMOTOR];
         // check if position has been reached, set break condiion
         command == 'R' ? (breakCondition = (rPos <= rTarget + DEVIATION))
-                        : (breakCondition = (rPos >= rTarget - DEVIATION));
+                       : (breakCondition = (rPos >= rTarget - DEVIATION));
 
         if (breakCondition) {
             motorPosition[LMOTOR] = posSensorReadings[LMOTOR];
@@ -453,42 +453,42 @@ void Epuck::rotateRobot(char command) {
 }
 
 void Epuck::adjustRotation() {
-    //North      East     South    West      
-    double rBiggerValues[4] = {PI/4,-PI/4,(-3*PI)/4,(3*PI)/4};
-    double rSmallerValues[4] = {0,-PI/2,-PI,PI/2};
-    double lBiggerValues[4] = {0,-PI/2,PI,PI/2};
-    double lSmallerValues[4] = {-PI/4,-3*PI/4,3*PI/4,PI/4};
-    double biggerValues[4] = {0,-PI/2,-PI,PI/2};
-    double smallerValues[4] = {0,-PI/2,PI,PI/2};
-    int i=0;
-    int j=0;
+    //North      East     South    West
+    double rBiggerValues[4] = {PI / 4, -PI / 4, (-3 * PI) / 4, (3 * PI) / 4};
+    double rSmallerValues[4] = {0, -PI / 2, -PI, PI / 2};
+    double lBiggerValues[4] = {0, -PI / 2, PI, PI / 2};
+    double lSmallerValues[4] = {-PI / 4, -3 * PI / 4, 3 * PI / 4, PI / 4};
+    double biggerValues[4] = {0, -PI / 2, -PI, PI / 2};
+    double smallerValues[4] = {0, -PI / 2, PI, PI / 2};
+    int i = 0;
+    int j = 0;
     double lTarget, rTarget;
     lTarget = motorPosition[LMOTOR];
     rTarget = motorPosition[RMOTOR];
     while (robot->step(TIME_STEP) != -1) {
         getIMUReadings();
-        for (i=0;i<4;i++) {
+        for (i = 0; i < 4; i++) {
             if (yaw < rBiggerValues[i] && yaw > rSmallerValues[i]) {
-                cout <<"Adjusting heading... TURN RIGHT " << endl;
-                lTarget = lTarget + DIST_ROTATE/180;
-                rTarget = rTarget - DIST_ROTATE/180;
+                cout << "Adjusting heading to the RIGHT " << endl;
+                lTarget = lTarget + DIST_ROTATE / 180;
+                rTarget = rTarget - DIST_ROTATE / 180;
                 motors[LMOTOR]->setPosition(lTarget);
                 motors[RMOTOR]->setPosition(rTarget);
-                j=i;
+                j = i;
             } else if (yaw < lBiggerValues[i] && yaw > lSmallerValues[i]) {
-                cout <<"Adjusting heading... TURN LEFT " << endl;
-                lTarget = lTarget - DIST_ROTATE/180;
-                rTarget = rTarget + DIST_ROTATE/180;
+                cout << "Adjusting heading to the LEFT " << endl;
+                lTarget = lTarget - DIST_ROTATE / 180;
+                rTarget = rTarget + DIST_ROTATE / 180;
                 motors[LMOTOR]->setPosition(lTarget);
                 motors[RMOTOR]->setPosition(rTarget);
-                j=i;
+                j = i;
             }
         }
-        i=0;
+        i = 0;
         if (abs(yaw - biggerValues[j]) < DEVIATION_YAW || abs(yaw - smallerValues[j]) < DEVIATION_YAW) {
             getIMUReadings();
-            getPosSensorReadings(); 
-            cout << "Final Yaw " <<yaw << endl;
+            getPosSensorReadings();
+            cout << "Final Yaw " << yaw << endl;
             motorPosition[LMOTOR] = posSensorReadings[LMOTOR];
             motorPosition[RMOTOR] = posSensorReadings[RMOTOR];
             break;
@@ -523,7 +523,7 @@ int* Epuck::getPosition() {
 }
 
 void Epuck::getCommands() {
-    readPath();              // extract commands from file
+    readPath();  // extract commands from file
     //set initial position, covert from char to int
     gridPosition[ROW] = commands[INIT_ROW] - '0';
     gridPosition[COLUMN] = commands[INIT_COL] - '0';
@@ -603,7 +603,7 @@ void Epuck::runSim(bool smooth) {
         smoothPath();
         // cout << commands << endl;
         currCommand = commands[currCommandIndex - 1];
-        
+
         if (currCommand == 'L' || currCommand == 'R') rotateRobot();
         moveRobot(0, true);
 
@@ -627,12 +627,14 @@ void Epuck::runSim(bool smooth) {
             // if final command executed
             if (currCommandIndex == endCommand) break;
         }
-        
+
     } else {
         while (robot->step(TIME_STEP) != -1) {
             currCommand = commands[currCommandIndex];
-            if (currCommand == 'F') moveRobot();
-            else rotateRobot();
+            if (currCommand == 'F')
+                moveRobot();
+            else
+                rotateRobot();
 
             currCommandIndex += 1;
 

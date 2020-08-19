@@ -1,9 +1,10 @@
+// Epuck class header file
 // webots include files
 #include <webots/DistanceSensor.hpp>
+#include <webots/InertialUnit.hpp>
 #include <webots/Motor.hpp>
 #include <webots/PositionSensor.hpp>
 #include <webots/Robot.hpp>
-#include <webots/InertialUnit.hpp>
 
 // other includes
 #include <cmath>
@@ -24,7 +25,7 @@ using namespace std;
 #define YAW_INDEX 2
 #define DEVIATION 0.01
 #define COLLISION 750
-#define DEVIATION_YAW 0.005
+#define DEVIATION_YAW 0.03
 
 // initialising constants (index of instructions in file)
 #define INIT_ROW 0
@@ -40,7 +41,7 @@ using namespace std;
 
 // Rotating and forward motion formulas
 #define DIST_FORWARD (LEN_SQUARE / WHEEL_RAD)
-#define CORR_FACTOR_1 0.15
+// #define CORR_FACTOR_1 0.15
 #define DIST_ROTATE (PI / 4 * AXLE_LEN / WHEEL_RAD)
 #define SPEED_FORWARD MAX_SPEED
 #define SPEED_ROTATE (0.4 * MAX_SPEED)

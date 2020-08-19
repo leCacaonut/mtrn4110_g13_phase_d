@@ -1,3 +1,4 @@
+// Exploration header file
 
 class ExploreMap {
    private:

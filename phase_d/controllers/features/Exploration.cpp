@@ -1,7 +1,7 @@
-/*
-*  Exploring a map
-*
-*
+/* 
+*  Exploration of the map using a robot class
+*  Written by Gordon Chen
+*  Edited by Mei Yan Tang
 */
 
 // includes
@@ -320,7 +320,7 @@ void ExploreMap::explore(T& robot) {
             actualInitialPosition = TOP_RIGHT;
         }
     } while (!(initialPosition[ROW] == gridPosition[ROW] && initialPosition[COL] == gridPosition[COL]));
-
+    
     // Extra rotations to return to initial heading
     cout << "--- Resetting Position ---" << endl;
     while (heading != initialHeading) {
@@ -374,7 +374,7 @@ void ExploreMap::explore(T& robot) {
                     robot.rotateRobot('R');
                     break;
             }
-            
+
             gridPosition = robot.getPosition();
             walls = robot.getWalls();
             heading = robot.getHeading();
@@ -402,6 +402,9 @@ void ExploreMap::explore(T& robot) {
         }
     FIND_NEW_PATH:;
         // cout << "Finding a new path" << endl;
+        // print2DVector(exploredMap);
+        // print2DVector(hWalls);
+        // print2DVector(vWalls);
     }
     cout << ">>> RESETTING <<<\n--- Map Explored - Returning to Start ---" << endl;
     PathFinding::generatePath(robot.getHeading(), robot.getPosition(), initialPosition, hWalls, vWalls, instructions);
