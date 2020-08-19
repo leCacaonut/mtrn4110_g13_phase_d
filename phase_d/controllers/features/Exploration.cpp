@@ -324,7 +324,7 @@ void ExploreMap::explore(T& robot) {
     // Extra rotations to return to initial heading
     cout << "--- Resetting Position ---" << endl;
     while (heading != initialHeading) {
-        robot.rotateRobot('L');
+        robot.rotateRobot('L', false);
         heading = robot.getHeading();
     }
 
@@ -351,12 +351,12 @@ void ExploreMap::explore(T& robot) {
         // turn until robot faces an opening
         if (walls[FRONT] == 'Y') {
             if (walls[LEFT] == 'N') {
-                robot.rotateRobot('L');
+                robot.rotateRobot('L', false);
             } else if (walls[RIGHT] == 'N') {
-                robot.rotateRobot('R');
+                robot.rotateRobot('R', false);
             } else {
-                robot.rotateRobot('L');
-                robot.rotateRobot('L');
+                robot.rotateRobot('L', false);
+                robot.rotateRobot('L', false);
             }
         }
         // find a path
@@ -368,10 +368,10 @@ void ExploreMap::explore(T& robot) {
                     robot.moveRobot();
                     break;
                 case 'L':
-                    robot.rotateRobot('L');
+                    robot.rotateRobot('L', false);
                     break;
                 case 'R':
-                    robot.rotateRobot('R');
+                    robot.rotateRobot('R', false);
                     break;
             }
 
@@ -414,15 +414,15 @@ void ExploreMap::explore(T& robot) {
                 robot.moveRobot();
                 break;
             case 'L':
-                robot.rotateRobot('L');
+                robot.rotateRobot('L', false);
                 break;
             case 'R':
-                robot.rotateRobot('R');
+                robot.rotateRobot('R', false);
                 break;
         }
     }
     while (heading != initialHeading) {
-        robot.rotateRobot('L');
+        robot.rotateRobot('L', false);
         heading = robot.getHeading();
         cout << "HEAD::" << heading << endl;
     }

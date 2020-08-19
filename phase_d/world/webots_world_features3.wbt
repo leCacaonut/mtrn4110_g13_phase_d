@@ -3,7 +3,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -1 0 0 1.5708003061004252
-  position 0 2.4984008606371138 -1.9832893001947556e-06
+  position 0 2.9155867605557253 -3.643399458196939e-06
 }
 TexturedBackground {
 }
@@ -36,7 +36,13 @@ DEF MAZE Group {
       }
     }
     OilBarrel {
-      translation -0.33192 0 -0.466569
+      translation -0.341538 0 -0.465164
+      height 0.1
+      radius 0.03
+    }
+    OilBarrel {
+      translation -0.20919 0 -0.471003
+      name "oil barrel(1)"
       height 0.1
       radius 0.03
     }
@@ -209,9 +215,9 @@ DEF MAZE Group {
       length 0.015
     }
     DEF Pole MazeBlock {
-      translation 0.24750000000007508 -1.147769824107192e-06 -0.24749999999992495
+      translation 0.5775 -1.14777e-06 -0.2475
       rotation -0.7508918144388468 0.4037255329813224 -0.5226539744684656 -7.458843566933812e-16
-      name "maze block(25)"
+      name "maze block(31)"
       length 0.015
     }
     DEF Pole MazeBlock {
@@ -224,12 +230,6 @@ DEF MAZE Group {
       translation -0.5774999999999253 -1.147769824114131e-06 -0.082499999999925
       rotation -0.25695617330063697 0.5344454412617218 0.8051966190423656 3.110267154401705e-16
       name "maze block(30)"
-      length 0.015
-    }
-    DEF Pole MazeBlock {
-      translation -0.4124999999999248 -1.147769824114131e-06 -0.082499999999925
-      rotation -0.9653435300314631 0.17133181138217085 -0.1968686857651509 3.8244148884261827e-16
-      name "maze block(31)"
       length 0.015
     }
     DEF Pole MazeBlock {
@@ -287,21 +287,33 @@ DEF MAZE Group {
       length 0.015
     }
     DEF Pole MazeBlock {
-      translation -0.082499999999925 -1.147769824114131e-06 0.08250000000007501
+      translation 0.0825 -1.14777e-06 -0.2475
       rotation -0.9376303843940237 -0.29787643004766756 -0.17921745083326138 4.561058239884519e-16
-      name "maze block(43)"
+      name "maze block(2)"
       length 0.015
     }
     DEF Pole MazeBlock {
-      translation 0.08250000000007501 -1.147769824114131e-06 0.08250000000007501
+      translation 0.0825 -1.14777e-06 0.0825
       rotation -0.9376303843940237 -0.29787643004766756 -0.17921745083326138 4.561058239884519e-16
-      name "maze block(44)"
+      name "maze block(59)"
       length 0.015
     }
     DEF Pole MazeBlock {
-      translation 0.2475000000000751 -1.1477698241210699e-06 0.08250000000007487
+      translation 0.5775 -1.14777e-06 0.0825
       rotation -0.9035313663010327 0.262591544792843 -0.3386395586955209 -3.0644018610808084e-16
       name "maze block(45)"
+      length 0.015
+    }
+    DEF Pole MazeBlock {
+      translation 0.2475 -1.14777e-06 0.0825
+      rotation -0.9035313663010327 0.262591544792843 -0.3386395586955209 -3.0644018610808084e-16
+      name "maze block(8)"
+      length 0.015
+    }
+    DEF Pole MazeBlock {
+      translation -0.0825 -1.14777e-06 0.0825
+      rotation -0.9035313663010327 0.262591544792843 -0.3386395586955209 -3.0644018610808084e-16
+      name "maze block(17)"
       length 0.015
     }
     DEF Pole MazeBlock {
@@ -335,12 +347,6 @@ DEF MAZE Group {
       length 0.015
     }
     DEF Pole MazeBlock {
-      translation 0.082500000000075 -1.147769824114131e-06 0.247500000000075
-      rotation 0.338244539960103 0.4633183573756112 -0.8191011725702408 2.5107354834922356e-16
-      name "maze block(54)"
-      length 0.015
-    }
-    DEF Pole MazeBlock {
       translation 0.24750000000007516 -1.147769824114131e-06 0.24750000000007505
       rotation -0.20687912838514658 0.2078161194069219 0.9560405256856269 6.017464005546324e-16
       name "maze block(55)"
@@ -365,27 +371,21 @@ DEF MAZE Group {
       length 0.14
     }
     DEF hBlock MazeBlock {
-      translation 0.33000000000033514 -1.071251835915027e-05 0.082500000009498
-      rotation -4.145440029961702e-08 0.999999999999999 1.4846999338983554e-08 4.797606087056097e-09
-      name "maze block(62)"
-      length 0.14
-    }
-    DEF hBlock MazeBlock {
-      translation 0.16500000000033538 -1.071251835914333e-05 -0.08249999999050195
-      rotation -1.0808699739865345e-07 0.9999999999999941 7.984403371741843e-09 4.797606092423641e-09
-      name "maze block(61)"
-      length 0.14
-    }
-    DEF hBlock MazeBlock {
-      translation 0.16500000000033538 -1.071251835914333e-05 0.08250000000949806
+      translation 0.495 -1.07125e-05 0.0825
       rotation -1.0808699739865345e-07 0.9999999999999941 7.984403371741843e-09 4.797606092423641e-09
       name "maze block(60)"
       length 0.14
     }
     DEF hBlock MazeBlock {
-      translation 0.3300000000003351 -1.071251835914333e-05 -0.24749999999050187
-      rotation -1.7318292924435828e-08 0.9999999999999999 -7.359923183788864e-09 4.797606073428629e-09
-      name "maze block(59)"
+      translation 0.165 -1.07125e-05 0.0825
+      rotation -1.0808699739865345e-07 0.9999999999999941 7.984403371741843e-09 4.797606092423641e-09
+      name "maze block(61)"
+      length 0.14
+    }
+    DEF hBlock MazeBlock {
+      translation 0.495 -1.07125e-05 -0.2475
+      rotation -1.0808699739865345e-07 0.9999999999999941 7.984403371741843e-09 4.797606092423641e-09
+      name "maze block(9)"
       length 0.14
     }
     DEF hBlock MazeBlock {
@@ -400,12 +400,6 @@ DEF MAZE Group {
       name "maze block(39)"
       length 0.14
     }
-    DEF hBlock MazeBlock {
-      translation 0.16500000000033546 -1.071251835914333e-05 0.24750000000949804
-      rotation -3.980098762383286e-08 0.9999999999999991 9.719505202842242e-09 4.797606036035154e-09
-      name "maze block(29)"
-      length 0.14
-    }
     DEF vBlock MazeBlock {
       translation -0.9049999999905025 -1.0712518359136391e-05 -0.3300000000003353
       rotation 2.3240361606637417e-17 1 -4.6753744122056884e-17 1.5707996986971804
@@ -413,45 +407,51 @@ DEF MAZE Group {
       length 0.14
     }
     DEF vBlock MazeBlock {
-      translation -0.9049999999905025 -1.0712519998380687e-05 -0.3300000000003353
-      rotation 1.2337413339378144e-17 1 -6.862372986086947e-17 1.5707996986971804
-      name "maze block(5)"
-      length 0.06
-    }
-    DEF vBlock MazeBlock {
-      translation -0.4124999999905017 -1.071251835914333e-05 -3.3543975292378124e-13
-      rotation 2.8335766070903795e-16 1 -2.4522434874090737e-16 1.5707996986971804
-      name "maze block(65)"
-      length 0.14
-    }
-    DEF vBlock MazeBlock {
-      translation 0.247500000009498 -1.071251835914333e-05 0.16499999999966466
+      translation 0.5775 -1.07125e-05 0.165
       rotation -8.207624031172603e-17 1 5.431568932778902e-17 1.5707996986971806
-      name "maze block(64)"
+      name "maze block(24)"
       length 0.14
     }
     DEF vBlock MazeBlock {
-      translation -0.24749999999050198 -1.0712518359157208e-05 -3.354457267863522e-13
+      translation 0.2475 -1.07125e-05 0.165
+      rotation -8.207624031172603e-17 1 5.431568932778902e-17 1.5707996986971806
+      name "maze block(28)"
+      length 0.14
+    }
+    DEF vBlock MazeBlock {
+      translation -0.5775 -1.07125e-05 1.11273e-06
       rotation -1.0327876227719443e-17 1 1.056945381902068e-16 1.5707996986971806
-      name "maze block(63)"
+      name "maze block(14)"
       length 0.14
     }
     DEF vBlock MazeBlock {
-      translation 0.24750000000949807 -1.071251835914333e-05 -0.1650000000003354
+      translation -0.2475 -1.07125e-05 1.02284e-12
+      rotation -1.0327876227719443e-17 1 1.056945381902068e-16 1.5707996986971806
+      name "maze block(15)"
+      length 0.14
+    }
+    DEF vBlock MazeBlock {
+      translation -0.0825 -1.07125e-05 -0.165
       rotation 4.0178689642994485e-17 1 -5.963221333240223e-17 1.5707996986971806
       name "maze block(49)"
       length 0.14
     }
     DEF vBlock MazeBlock {
-      translation 0.4125000000094981 -1.0712518359136391e-05 -0.1650000000003354
+      translation 0.0825 -1.07125e-05 -0.33
       rotation 2.11781176428104e-16 1 -2.681834721350019e-16 1.5707996986971804
       name "maze block(11)"
       length 0.14
     }
     DEF vBlock MazeBlock {
-      translation 0.4125000000094982 -1.071251835914333e-05 0.3299999999996648
-      rotation 1.3533836902363385e-16 1 -1.0565679148777665e-16 1.5707996986971802
-      name "maze block(48)"
+      translation 0.4125 -1.07125e-05 -0.33
+      rotation 2.11781176428104e-16 1 -2.681834721350019e-16 1.5707996986971804
+      name "maze block(25)"
+      length 0.14
+    }
+    DEF vBlock MazeBlock {
+      translation 0.0825 -1.07125e-05 -0.165
+      rotation 2.11781176428104e-16 1 -2.681834721350019e-16 1.5707996986971804
+      name "maze block(43)"
       length 0.14
     }
     DEF hBlock MazeBlock {
@@ -461,21 +461,21 @@ DEF MAZE Group {
       length 0.14
     }
     DEF hBlock MazeBlock {
-      translation -0.6599999999996643 -1.071251835914333e-05 -0.08249999999050196
+      translation -0.495 -1.07125e-05 0.0825
+      rotation -8.425954330017287e-08 0.9999999999999963 -1.5079165365275112e-08 4.797606118035919e-09
+      name "maze block(16)"
+      length 0.14
+    }
+    DEF hBlock MazeBlock {
+      translation -0.33 -1.07125e-05 -0.0825
       rotation -7.947175711684334e-08 0.9999999999999967 1.6543079493372058e-08 4.7976060681166595e-09
-      name "maze block(6)"
+      name "maze block(19)"
       length 0.14
     }
     DEF hBlock MazeBlock {
-      translation 3.354092320822875e-13 -1.071251835914333e-05 -0.082499999990502
-      rotation 5.931003950445107e-08 0.9999999999999981 1.8301415302345905e-08 4.797606055607021e-09
-      name "maze block(8)"
-      length 0.14
-    }
-    DEF hBlock MazeBlock {
-      translation 3.354092320822875e-13 -1.071251835914333e-05 0.082500000009498
-      rotation 5.931003950445107e-08 0.9999999999999981 1.8301415302345905e-08 4.797606055607021e-09
-      name "maze block(9)"
+      translation 0 -1.07125e-05 -0.0825
+      rotation -7.947175711684334e-08 0.9999999999999967 1.6543079493372058e-08 4.7976060681166595e-09
+      name "maze block(47)"
       length 0.14
     }
     DEF hBlock MazeBlock {
@@ -485,45 +485,69 @@ DEF MAZE Group {
       length 0.14
     }
     DEF hBlock MazeBlock {
+      translation -0.33 -1.07125e-05 -0.2475
+      rotation -4.145440029961702e-08 0.999999999999999 1.4846999338983554e-08 4.797606087056097e-09
+      name "maze block(5)"
+      length 0.14
+    }
+    DEF hBlock MazeBlock {
+      translation 0 -1.07125e-05 -0.2475
+      rotation -4.145440029961702e-08 0.999999999999999 1.4846999338983554e-08 4.797606087056097e-09
+      name "maze block(38)"
+      length 0.14
+    }
+    DEF hBlock MazeBlock {
+      translation 1.58323e-09 -1.07125e-05 0.0825
+      rotation -4.145440029961702e-08 0.999999999999999 1.4846999338983554e-08 4.797606087056097e-09
+      name "maze block(62)"
+      length 0.14
+    }
+    DEF hBlock MazeBlock {
       translation -0.32999999999966495 -1.071251835914333e-05 0.24750000000949815
       rotation -1.0620881610146577e-07 0.9999999999999942 -1.081518104667744e-08 4.7976060821306624e-09
       name "maze block(13)"
       length 0.14
     }
     DEF vBlock MazeBlock {
-      translation -0.08249999999050182 -1.071251835914333e-05 0.32999999999966473
+      translation -0.0825009 -1.07125e-05 5.68486e-14
+      rotation 1.3155741044762202e-16 1 -8.11257066085155e-17 1.5707996986971806
+      name "maze block(3)"
+      length 0.14
+    }
+    DEF vBlock MazeBlock {
+      translation -0.0825001 -1.07125e-05 0.33
       rotation 1.3155741044762202e-16 1 -8.11257066085155e-17 1.5707996986971806
       name "maze block(18)"
       length 0.14
     }
     DEF vBlock MazeBlock {
-      translation -0.08249999999050182 -1.071251835914333e-05 -0.3300000000003353
-      rotation 1.3155741044762202e-16 1 -8.11257066085155e-17 1.5707996986971806
-      name "maze block(2)"
-      length 0.14
-    }
-    DEF vBlock MazeBlock {
-      translation -0.08249999999050198 -1.071251835915027e-05 -3.354515872266255e-13
+      translation 0.2475 -1.07125e-05 -1.11273e-06
       rotation -5.5017203250208795e-17 1 1.1394868742402347e-17 1.5707996986971806
-      name "maze block(17)"
+      name "maze block(6)"
       length 0.14
     }
     DEF vBlock MazeBlock {
-      translation -0.24749999999050187 -1.071251835914333e-05 -0.16500000000033538
+      translation 0.5775 -1.07125e-05 0
+      rotation -5.5017203250208795e-17 1 1.1394868742402347e-17 1.5707996986971806
+      name "maze block(27)"
+      length 0.14
+    }
+    DEF vBlock MazeBlock {
+      translation 0.5775 -1.07125e-05 -0.33
+      rotation -5.5017203250208795e-17 1 1.1394868742402347e-17 1.5707996986971806
+      name "maze block(48)"
+      length 0.14
+    }
+    DEF vBlock MazeBlock {
+      translation -0.5775 -1.07125e-05 -0.165
       rotation 1.7774675277251633e-17 1 -3.342964828161182e-17 1.5707996986971802
-      name "maze block(15)"
+      name "maze block(7)"
       length 0.14
     }
     DEF vBlock MazeBlock {
       translation -0.5774999999905025 -1.071251835914333e-05 0.3299999999996648
       rotation -6.455172315877509e-17 1 4.1420460457604893e-17 1.5707996986971806
       name "maze block(1)"
-      length 0.14
-    }
-    DEF vBlock MazeBlock {
-      translation -0.5774999999905025 -1.071251835914333e-05 0.16499999999966458
-      rotation -4.862231524318149e-17 1 4.963491984888027e-17 1.5707996986971806
-      name "maze block(3)"
       length 0.14
     }
   ]

@@ -56,7 +56,9 @@ using namespace std;
 
 enum WallIDs { LEFT,
                RIGHT,
-               FRONT } wIDs;  // wall position indexing
+               FRONT,
+               FRONTLEFT,
+               FRONTRIGHT } wIDs;  // wall position indexing
 typedef enum PositionIDs { ROW,
                            COLUMN } pIDs;  // used to index position array
 enum MotorIDs { LMOTOR,
@@ -66,7 +68,7 @@ class Epuck {
    private:
     Robot *robot;
     Motor *motors[2];
-    DistanceSensor *distSensors[3];
+    DistanceSensor *distSensors[5];
     PositionSensor *posSensors[2];
     InertialUnit *IMU;
 
@@ -74,7 +76,7 @@ class Epuck {
     int currCommandIndex;
     char currCommand;
     int endCommand;
-    double distSensorReadings[3];
+    double distSensorReadings[5];
     double posSensorReadings[2];
     char heading;
     int gridPosition[2];
@@ -117,12 +119,15 @@ class Epuck {
     // navigation
     void moveRobot();                                                 // moves grid length
     void moveRobot(unsigned int numberOfMotions);                     // smooth move grid length
-    void moveRobot(unsigned int numberOfMotions, bool moveHalfGrid);  // smooth move half grid length
+    void moveRobot(unsigned int numberOfMotions, bool moveHalfGrid, bool avoidingObstacle);  // smooth move half grid length
     void rotateRobot();
     void rotateRobot(bool smoothGridTurn);
-    void rotateRobot(char command);
+    void rotateRobot(char command, bool avoidingObstacle);
     void smoothPath();
     void displayStatus();
     void followWallStep();
     void adjustRotation();
+    // obstacle avoidance
+    void avoidObstacles(int obstacleLocation);
+    void moveHalfStep();
 };
