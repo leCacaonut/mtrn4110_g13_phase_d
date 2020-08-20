@@ -4,7 +4,7 @@ Run this python script to execute everything
 '''
 
 import subprocess as sp
-import sys, argparse, codecs, re
+import argparse, codecs, re
 
 def check_environment():
     env_list = sp.check_output(["conda", "info", "--envs"])
@@ -41,10 +41,26 @@ def launch_webots(x=0):
     elif x == 1:
         sp.run(R"phase_d\world\webots_world_features.wbt", shell=True)
     elif x == 2:
-        sp.run(R"phase_d\world\webots_world_manual.wbt", shell=True)
+        sp.run(R"phase_d\world\webots_world_features_obstacles.wbt", shell=True)
     elif x == 3:
-        sp.run(R"phase_d\world\webots_world_.wbt", shell=True)
+        doc1()
+        sp.run(R"phase_d\world\webots_world_allfeatures.wbt", shell=True)
+    elif x == 4:
+        doc2()
+        sp.run(R"phase_d\world\webots_world_manual.wbt", shell=True)
 
+def doc1():
+    '''
+    Once the robot has explored the map and returned to start, 
+    pause the simulation and insert some obstacles
+    '''
+    print(doc1.__doc__)
+
+def doc2():
+    '''
+    Click inside the webots window and use the arrow keys to navigate
+    '''
+    print(doc2.__doc__)
 
 def main():
 
@@ -61,7 +77,6 @@ def main():
         parser.add_argument('integer', type=int, default=[0], nargs='*')
         args = parser.parse_args()
 
-        print(args)
         sp.run(R"echo Running programs", shell=True)
         if args.integer[0] == 0:
             convert_map()
